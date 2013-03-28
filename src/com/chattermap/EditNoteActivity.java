@@ -6,13 +6,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class EditNoteActivity extends Activity {
-
+	private float mLat, mLong;
+	private long mId;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// TODO: Likely read location based in from creating activity 
-		// from savedInstanceState
+		// Get the location and id
+		mLat = savedInstanceState.getFloat(getString(R.string.editnote_latitude));
+		mLong = savedInstanceState.getFloat(getString(R.string.editnote_longitude));
+		mId = savedInstanceState.getLong(getString(R.string.editnote_id, -1));
+		if( mId == -1 ) {
+			// TODO: Generate new ID for this note
+		}
 		
 		// Set the layout and initialize:
 		setContentView(R.layout.screen_editnote);

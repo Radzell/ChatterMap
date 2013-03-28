@@ -13,6 +13,9 @@
     <string name="editnote_edit">Edit note text &#8230;</string>
     <string name="editnote_submit">Submit Note</string>
     <string name="editnote_attach">Attach an Image</string>
+    <string name="editnote_latitude">latitude</string>
+    <string name="editnote_longitude">longitude</string>
+    <string name="editnote_id">noteid</string>
 
     <!-- Location Dialog Fragment Strings -->
     <string name="location_dialog_message">

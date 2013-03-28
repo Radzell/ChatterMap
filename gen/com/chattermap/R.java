@@ -218,6 +218,9 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f05000d;
         public static final int editnote_attach=0x7f050018;
         public static final int editnote_edit=0x7f050016;
+        public static final int editnote_id=0x7f05001b;
+        public static final int editnote_latitude=0x7f050019;
+        public static final int editnote_longitude=0x7f05001a;
         /**   Edit Note Screen Strings 
          */
         public static final int editnote_share=0x7f050015;
@@ -225,14 +228,14 @@ containing a value of this type.
         public static final int hello_world=0x7f050012;
         /**  Location Dialog Fragment Strings 
          */
-        public static final int location_dialog_message=0x7f050019;
-        public static final int location_dialog_negative_button=0x7f05001b;
-        public static final int location_dialog_positive_button=0x7f05001a;
+        public static final int location_dialog_message=0x7f05001c;
+        public static final int location_dialog_negative_button=0x7f05001e;
+        public static final int location_dialog_positive_button=0x7f05001d;
         /**  Map Screen Strings 
          */
         public static final int menu_add=0x7f050013;
         public static final int menu_settings=0x7f050014;
-        public static final int no_location_message=0x7f05001c;
+        public static final int no_location_message=0x7f05001f;
     }
     public static final class style {
         /** 
