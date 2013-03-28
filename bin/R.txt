@@ -15,8 +15,9 @@ int attr zOrderOnTop 0x7f01000d
 int drawable ic_launcher 0x7f020000
 int id hybrid 0x7f040004
 int id map 0x7f040006
+int id menu_add 0x7f040009
 int id menu_attach 0x7f040008
-int id menu_settings 0x7f040009
+int id menu_settings 0x7f04000a
 int id menu_submit 0x7f040007
 int id none 0x7f040000
 int id normal 0x7f040001
@@ -45,16 +46,17 @@ int string common_google_play_services_update_button 0x7f05000c
 int string common_google_play_services_update_text 0x7f050008
 int string common_google_play_services_update_title 0x7f050007
 int string common_signin_button_text_long 0x7f05000d
-int string editnote_attach 0x7f050017
-int string editnote_edit 0x7f050015
-int string editnote_share 0x7f050014
-int string editnote_submit 0x7f050016
+int string editnote_attach 0x7f050018
+int string editnote_edit 0x7f050016
+int string editnote_share 0x7f050015
+int string editnote_submit 0x7f050017
 int string hello_world 0x7f050012
-int string location_dialog_message 0x7f050018
-int string location_dialog_negative_button 0x7f05001a
-int string location_dialog_positive_button 0x7f050019
-int string menu_settings 0x7f050013
-int string no_location_message 0x7f05001b
+int string location_dialog_message 0x7f050019
+int string location_dialog_negative_button 0x7f05001b
+int string location_dialog_positive_button 0x7f05001a
+int string menu_add 0x7f050013
+int string menu_settings 0x7f050014
+int string no_location_message 0x7f05001c
 int style AppBaseTheme 0x7f060000
 int style AppTheme 0x7f060001
 int[] styleable MapAttrs { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d }

@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.chattermap.entity.Group;
 import com.chattermap.entity.Note;

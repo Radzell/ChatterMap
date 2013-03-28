@@ -3,6 +3,9 @@
 
     <string name="app_name">ChatterMap</string>
     <string name="hello_world">Hello world!</string>
+    
+    <!-- Map Screen Strings -->
+    <string name="menu_add">Add Note or Save Current Location</string>
     <string name="menu_settings">Settings</string>
     
     <!--  Edit Note Screen Strings -->
