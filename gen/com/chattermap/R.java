@@ -134,18 +134,23 @@ containing a value of this type.
     public static final class id {
         public static final int hybrid=0x7f040004;
         public static final int map=0x7f040005;
-        public static final int menu_settings=0x7f040006;
+        public static final int menu_attach=0x7f040009;
+        public static final int menu_settings=0x7f040007;
+        public static final int menu_submit=0x7f040008;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
+        public static final int share_spinner=0x7f040006;
         public static final int terrain=0x7f040003;
     }
     public static final class layout {
         public static final int maplayout=0x7f030000;
         public static final int mapscreen=0x7f030001;
+        public static final int screen_editnote=0x7f030002;
     }
     public static final class menu {
         public static final int maplayout=0x7f070000;
+        public static final int menu_editnote=0x7f070001;
     }
     public static final class string {
         public static final int app_name=0x7f050011;
@@ -211,6 +216,12 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f05000d;
+        public static final int editnote_attach=0x7f050017;
+        public static final int editnote_edit=0x7f050015;
+        /**   Edit Note Screen Strings 
+         */
+        public static final int editnote_share=0x7f050014;
+        public static final int editnote_submit=0x7f050016;
         public static final int hello_world=0x7f050012;
         public static final int menu_settings=0x7f050013;
     }
