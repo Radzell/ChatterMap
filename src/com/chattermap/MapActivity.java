@@ -32,7 +32,7 @@ public class MapActivity extends Activity implements LocationListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.maplayout);
+		setContentView(R.layout.screen_maplayout);
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		setupDB();
 		createTestGroup();
@@ -80,7 +80,7 @@ public class MapActivity extends Activity implements LocationListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.maplayout, menu);
+		getMenuInflater().inflate(R.menu.menu_maplayout, menu);
 		return true;
 	}
 
