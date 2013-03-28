@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
 import com.chattermap.entity.Group;
 import com.chattermap.entity.Note;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
@@ -18,15 +25,24 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class MapActivity extends Activity {
-
+public class MapActivity extends Activity implements LocationListener {
+	private GoogleMap mMap;
+	private Location mCurrentLocation = null;
+	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maplayout);
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		setupDB();
 		createTestGroup();
 		createTestNoteInGroup();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		setMapTarget( LocationUtils.getCurrentLocation(this,this) );
 	}
 
 	private void createTestNoteInGroup() {
@@ -59,7 +75,6 @@ public class MapActivity extends Activity {
 				}
 			}
 		});
-
 	}
 
 	@Override
@@ -125,5 +140,54 @@ public class MapActivity extends Activity {
 		models.add(Note.class);
 		DatabaseAdapter adapter = DatabaseAdapter.getInstance(this);
 		adapter.setModels(models);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		if( location == null ) return;
+		if( mCurrentLocation == null ) mCurrentLocation = location;
+		
+		// If the new update is more accurate, update the current location
+		if( location.getAccuracy() < mCurrentLocation.getAccuracy() ) {
+			mCurrentLocation = location;
+			setMapTarget(location);
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Sets the maps camera to focus on the given location.  Also sets the zoom level
+	 * to an appropriate zoomed in state if a zoom hasn't yet been set.
+	 * @param loc {@link Location} to set the camera's position to
+	 */
+	private void setMapTarget( Location loc ) {
+		if(mMap != null ) {
+			float zoom = mMap.getCameraPosition().zoom;
+			
+			// TODO: Should this be if zoom == GoogleMap.getMaxZoomLevel() ?
+			// TODO: Zoom 17 was chosen because that's the first zoom level at
+			//        which buildings can be seen, should this be different?
+			zoom = zoom < 17.0f ? 17.0f : zoom;
+			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(
+					new LatLng(loc.getLatitude(), loc.getLongitude()), zoom);
+			mMap.moveCamera(npos);
+		}
 	}
 }

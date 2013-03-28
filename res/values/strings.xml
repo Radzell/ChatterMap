@@ -11,4 +11,11 @@
     <string name="editnote_submit">Submit Note</string>
     <string name="editnote_attach">Attach an Image</string>
 
+    <!-- Location Dialog Fragment Strings -->
+    <string name="location_dialog_message">
+        Location services are currently disabled, but highly recommended.
+    </string>
+    <string name="location_dialog_positive_button">Go to Location Settings</string>
+    <string name="location_dialog_negative_button">Leave Location Services Disabled</string>
+    <string name="no_location_message">May not have accurate location data</string>
 </resources>

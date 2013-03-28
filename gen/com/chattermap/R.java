@@ -145,8 +145,7 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int maplayout=0x7f030000;
-        public static final int mapscreen=0x7f030001;
-        public static final int screen_editnote=0x7f030002;
+        public static final int screen_editnote=0x7f030001;
     }
     public static final class menu {
         public static final int maplayout=0x7f070000;
@@ -223,7 +222,13 @@ containing a value of this type.
         public static final int editnote_share=0x7f050014;
         public static final int editnote_submit=0x7f050016;
         public static final int hello_world=0x7f050012;
+        /**  Location Dialog Fragment Strings 
+         */
+        public static final int location_dialog_message=0x7f050018;
+        public static final int location_dialog_negative_button=0x7f05001a;
+        public static final int location_dialog_positive_button=0x7f050019;
         public static final int menu_settings=0x7f050013;
+        public static final int no_location_message=0x7f05001b;
     }
     public static final class style {
         /** 
