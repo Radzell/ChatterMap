@@ -24,9 +24,9 @@ public class MapActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maplayout);
-		setupDB();
-		createTestGroup();
-		createTestNoteInGroup();
+		//setupDB();
+		//createTestGroup();
+		//createTestNoteInGroup();
 	}
 
 	private void createTestNoteInGroup() {
