@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class EditNoteActivity extends Activity {
-	private float mLat, mLong;
+	private double mLat, mLong;
 	private long mId;
 	
 	@Override
@@ -14,8 +14,8 @@ public class EditNoteActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		// Get the location and id
-		mLat = savedInstanceState.getFloat(getString(R.string.editnote_latitude));
-		mLong = savedInstanceState.getFloat(getString(R.string.editnote_longitude));
+		mLat = savedInstanceState.getDouble(getString(R.string.editnote_latitude));
+		mLong = savedInstanceState.getDouble(getString(R.string.editnote_longitude));
 		mId = savedInstanceState.getLong(getString(R.string.editnote_id, -1));
 		if( mId == -1 ) {
 			// TODO: Generate new ID for this note
