@@ -1,7 +1,6 @@
 package com.chattermap;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,8 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.chattermap.entity.Group;

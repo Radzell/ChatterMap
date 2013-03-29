@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Activity Names -->
     <string name="app_name">ChatterMap</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="edit_note">Edit Note</string>
     
     <!-- Login Screen Strings -->
     <string name="login_disclaimer">

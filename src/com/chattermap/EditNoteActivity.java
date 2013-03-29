@@ -1,6 +1,7 @@
 package com.chattermap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +15,11 @@ public class EditNoteActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		// Get the location and id
-		mLat = savedInstanceState.getDouble(getString(R.string.editnote_latitude));
-		mLong = savedInstanceState.getDouble(getString(R.string.editnote_longitude));
-		mId = savedInstanceState.getLong(getString(R.string.editnote_id, -1));
+		Intent intent = getIntent();
+		mLat = intent.getDoubleExtra(getString(R.string.editnote_latitude), 0.0);
+		mLong = intent.getDoubleExtra(getString(R.string.editnote_longitude), 0.0);
+		mId = intent.getLongExtra(getString(R.string.editnote_id), -1L);
+		
 		if( mId == -1 ) {
 			// TODO: Generate new ID for this note
 		}

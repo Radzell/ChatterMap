@@ -139,20 +139,22 @@ containing a value of this type.
         public static final int dialog_addfavorite=0x7f040006;
         public static final int dialog_sharenote=0x7f040005;
         public static final int hybrid=0x7f040004;
-        public static final int login_accountlist=0x7f04000b;
-        public static final int login_separator=0x7f04000a;
-        public static final int map=0x7f04000c;
-        public static final int menu_add=0x7f04000f;
-        public static final int menu_attach=0x7f04000e;
-        public static final int menu_settings=0x7f040010;
-        public static final int menu_submit=0x7f04000d;
+        public static final int login_accountlist=0x7f04000d;
+        public static final int login_separator=0x7f04000c;
+        public static final int map=0x7f04000e;
+        public static final int menu_add=0x7f040011;
+        public static final int menu_attach=0x7f040010;
+        public static final int menu_settings=0x7f040012;
+        public static final int menu_submit=0x7f04000f;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
-        public static final int share_spinner=0x7f040007;
+        public static final int screen_editnote_rl=0x7f040007;
+        public static final int share_spinner=0x7f040009;
         public static final int terrain=0x7f040003;
-        public static final int textview_chooseaccount=0x7f040009;
-        public static final int textview_disclaimer=0x7f040008;
+        public static final int textview_chooseaccount=0x7f04000b;
+        public static final int textview_disclaimer=0x7f04000a;
+        public static final int textview_share=0x7f040008;
     }
     public static final class layout {
         public static final int dialog_locationaction=0x7f030000;
@@ -165,6 +167,8 @@ containing a value of this type.
         public static final int menu_maplayout=0x7f070001;
     }
     public static final class string {
+        /**  Activity Names 
+         */
         public static final int app_name=0x7f050011;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
@@ -228,6 +232,7 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f05000d;
+        public static final int edit_note=0x7f050012;
         public static final int editnote_attach=0x7f05001b;
         public static final int editnote_edit=0x7f050019;
         public static final int editnote_id=0x7f05001e;
@@ -237,7 +242,6 @@ containing a value of this type.
          */
         public static final int editnote_share=0x7f050018;
         public static final int editnote_submit=0x7f05001a;
-        public static final int hello_world=0x7f050012;
         /**  Location Dialog Fragment Strings 
          */
         public static final int location_dialog_message=0x7f050021;
