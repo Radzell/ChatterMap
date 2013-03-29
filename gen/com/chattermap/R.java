@@ -130,23 +130,35 @@ containing a value of this type.
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int solid_holo_blue=0x7f020001;
+        public static final int transparent_background=0x7f020002;
+        public static final int transparent_button=0x7f020003;
+        public static final int transparent_button_pressed=0x7f020004;
     }
     public static final class id {
+        public static final int dialog_addfavorite=0x7f040006;
+        public static final int dialog_sharenote=0x7f040005;
         public static final int hybrid=0x7f040004;
-        public static final int map=0x7f040006;
-        public static final int menu_add=0x7f040009;
-        public static final int menu_attach=0x7f040008;
-        public static final int menu_settings=0x7f04000a;
-        public static final int menu_submit=0x7f040007;
+        public static final int login_accountlist=0x7f04000b;
+        public static final int login_separator=0x7f04000a;
+        public static final int map=0x7f04000c;
+        public static final int menu_add=0x7f04000f;
+        public static final int menu_attach=0x7f04000e;
+        public static final int menu_settings=0x7f040010;
+        public static final int menu_submit=0x7f04000d;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
-        public static final int share_spinner=0x7f040005;
+        public static final int share_spinner=0x7f040007;
         public static final int terrain=0x7f040003;
+        public static final int textview_chooseaccount=0x7f040009;
+        public static final int textview_disclaimer=0x7f040008;
     }
     public static final class layout {
-        public static final int screen_editnote=0x7f030000;
-        public static final int screen_maplayout=0x7f030001;
+        public static final int dialog_locationaction=0x7f030000;
+        public static final int screen_editnote=0x7f030001;
+        public static final int screen_login=0x7f030002;
+        public static final int screen_maplayout=0x7f030003;
     }
     public static final class menu {
         public static final int menu_editnote=0x7f070000;
@@ -216,26 +228,35 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f05000d;
-        public static final int editnote_attach=0x7f050018;
-        public static final int editnote_edit=0x7f050016;
-        public static final int editnote_id=0x7f05001b;
-        public static final int editnote_latitude=0x7f050019;
-        public static final int editnote_longitude=0x7f05001a;
+        public static final int editnote_attach=0x7f05001b;
+        public static final int editnote_edit=0x7f050019;
+        public static final int editnote_id=0x7f05001e;
+        public static final int editnote_latitude=0x7f05001c;
+        public static final int editnote_longitude=0x7f05001d;
         /**   Edit Note Screen Strings 
          */
-        public static final int editnote_share=0x7f050015;
-        public static final int editnote_submit=0x7f050017;
+        public static final int editnote_share=0x7f050018;
+        public static final int editnote_submit=0x7f05001a;
         public static final int hello_world=0x7f050012;
         /**  Location Dialog Fragment Strings 
          */
-        public static final int location_dialog_message=0x7f05001c;
-        public static final int location_dialog_negative_button=0x7f05001e;
-        public static final int location_dialog_positive_button=0x7f05001d;
+        public static final int location_dialog_message=0x7f050021;
+        public static final int location_dialog_negative_button=0x7f050023;
+        public static final int location_dialog_positive_button=0x7f050022;
+        public static final int locationaction_dialog_favorite=0x7f050020;
+        /**  Location Action Dialog Strings 
+         */
+        public static final int locationaction_dialog_share=0x7f05001f;
+        public static final int login_chooseaccount=0x7f050014;
+        public static final int login_createusername=0x7f050015;
+        /**  Login Screen Strings 
+         */
+        public static final int login_disclaimer=0x7f050013;
         /**  Map Screen Strings 
          */
-        public static final int menu_add=0x7f050013;
-        public static final int menu_settings=0x7f050014;
-        public static final int no_location_message=0x7f05001f;
+        public static final int menu_add=0x7f050016;
+        public static final int menu_settings=0x7f050017;
+        public static final int no_location_message=0x7f050024;
     }
     public static final class style {
         /** 

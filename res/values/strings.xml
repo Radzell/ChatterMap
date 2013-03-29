@@ -4,6 +4,15 @@
     <string name="app_name">ChatterMap</string>
     <string name="hello_world">Hello world!</string>
     
+    <!-- Login Screen Strings -->
+    <string name="login_disclaimer">
+        You can use your Google account to login to ChatterMap easily!
+        
+Don\'t worry!  Your account will only be used internally to keep track of which notes are yours or shared with you, but this information will never be displayed.
+    </string>
+    <string name="login_chooseaccount">Choose your Google account:</string>
+    <string name="login_createusername">Pick a public username:</string>
+    
     <!-- Map Screen Strings -->
     <string name="menu_add">Add Note or Save Current Location</string>
     <string name="menu_settings">Settings</string>
@@ -17,6 +26,10 @@
     <string name="editnote_longitude">longitude</string>
     <string name="editnote_id">noteid</string>
 
+    <!-- Location Action Dialog Strings -->
+    <string name="locationaction_dialog_share">Share Note Here</string>
+    <string name="locationaction_dialog_favorite">Add Location to Favorites</string>
+    
     <!-- Location Dialog Fragment Strings -->
     <string name="location_dialog_message">
         Location services are currently disabled, but highly recommended.

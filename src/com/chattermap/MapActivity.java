@@ -1,6 +1,7 @@
 package com.chattermap;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,6 +10,10 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.chattermap.entity.Group;
@@ -35,6 +40,7 @@ public class MapActivity extends Activity implements LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_maplayout);
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		mMap.setOnMapLongClickListener(new MapScreenLongClickListener(this));
 		setupDB();
 		createTestGroup();
 		createTestNoteInGroup();
@@ -82,6 +88,25 @@ public class MapActivity extends Activity implements LocationListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_maplayout, menu);
+		
+		// Add a listener to the add button to open a dialog for an action to 
+		// perform at current location
+		MenuItem shareButton = (MenuItem) menu.findItem(R.id.menu_add);
+		shareButton.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// If no current location, show an error message and do nothing
+				if( mCurrentLocation == null ) {
+					Toast.makeText(getApplicationContext(), "Haven't been able " +
+							"to obtain current location yet!", Toast.LENGTH_SHORT).show();
+				} else {
+					LocationActionDialog lad = new LocationActionDialog(MapActivity.this, 
+							mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+					lad.show();
+				}
+				return true;
+			}
+		});
 		return true;
 	}
 
