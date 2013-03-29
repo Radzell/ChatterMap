@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class LocationActionDialog extends Dialog {
 	private double mLat, mLong;
@@ -51,6 +52,8 @@ public class LocationActionDialog extends Dialog {
 			@Override
 			public void onClick(View v) {
 				// TODO: Add this location to favorites 
+				Toast.makeText(mContext, mContext.getString(R.string.locationaction_toast_add_location), 
+						Toast.LENGTH_SHORT).show();
 				LocationActionDialog.this.dismiss();
 			}
 		});

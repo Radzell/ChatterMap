@@ -68,17 +68,18 @@ int string editnote_latitude 0x7f05001c
 int string editnote_longitude 0x7f05001d
 int string editnote_share 0x7f050018
 int string editnote_submit 0x7f05001a
-int string location_dialog_message 0x7f050021
-int string location_dialog_negative_button 0x7f050023
-int string location_dialog_positive_button 0x7f050022
+int string location_dialog_message 0x7f050022
+int string location_dialog_negative_button 0x7f050024
+int string location_dialog_positive_button 0x7f050023
 int string locationaction_dialog_favorite 0x7f050020
 int string locationaction_dialog_share 0x7f05001f
+int string locationaction_toast_add_location 0x7f050021
 int string login_chooseaccount 0x7f050014
 int string login_createusername 0x7f050015
 int string login_disclaimer 0x7f050013
 int string menu_add 0x7f050016
 int string menu_settings 0x7f050017
-int string no_location_message 0x7f050024
+int string no_location_message 0x7f050025
 int style AppBaseTheme 0x7f060000
 int style AppTheme 0x7f060001
 int[] styleable MapAttrs { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d }

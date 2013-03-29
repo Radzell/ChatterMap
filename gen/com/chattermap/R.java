@@ -244,13 +244,14 @@ containing a value of this type.
         public static final int editnote_submit=0x7f05001a;
         /**  Location Dialog Fragment Strings 
          */
-        public static final int location_dialog_message=0x7f050021;
-        public static final int location_dialog_negative_button=0x7f050023;
-        public static final int location_dialog_positive_button=0x7f050022;
+        public static final int location_dialog_message=0x7f050022;
+        public static final int location_dialog_negative_button=0x7f050024;
+        public static final int location_dialog_positive_button=0x7f050023;
         public static final int locationaction_dialog_favorite=0x7f050020;
         /**  Location Action Dialog Strings 
          */
         public static final int locationaction_dialog_share=0x7f05001f;
+        public static final int locationaction_toast_add_location=0x7f050021;
         public static final int login_chooseaccount=0x7f050014;
         public static final int login_createusername=0x7f050015;
         /**  Login Screen Strings 
@@ -260,7 +261,7 @@ containing a value of this type.
          */
         public static final int menu_add=0x7f050016;
         public static final int menu_settings=0x7f050017;
-        public static final int no_location_message=0x7f050024;
+        public static final int no_location_message=0x7f050025;
     }
     public static final class style {
         /** 

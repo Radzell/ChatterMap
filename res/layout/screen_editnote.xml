@@ -33,7 +33,7 @@
     <EditText 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/editnote_edit"
+        android:hint="@string/editnote_edit"
         android:minLines="6"
         android:maxLines="10"
         android:scrollbars="vertical"
