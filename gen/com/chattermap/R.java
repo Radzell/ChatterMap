@@ -141,7 +141,6 @@ containing a value of this type.
         public static final int hybrid=0x7f040004;
         public static final int login_accountlist=0x7f04000e;
         public static final int login_separator=0x7f04000d;
-        public static final int mainlist=0x7f04000a;
         public static final int map=0x7f04000f;
         public static final int menu_add=0x7f040013;
         public static final int menu_addgroup=0x7f040012;
@@ -152,6 +151,7 @@ containing a value of this type.
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
         public static final int screen_editnote_rl=0x7f040007;
+        public static final int screen_mainlist=0x7f04000a;
         public static final int share_spinner=0x7f040009;
         public static final int terrain=0x7f040003;
         public static final int textview_chooseaccount=0x7f04000c;
