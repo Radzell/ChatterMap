@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+	<Button 
+	    android:id="@+id/dialog_sharenote"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dip"
+	    android:layout_weight="1"
+	    android:paddingLeft="20dip"
+	    android:paddingRight="20dip"
+	    android:paddingTop="20dip"
+	    android:paddingBottom="20dip"
+	    android:text="@string/locationaction_dialog_share"
+	    android:textSize="20sp"
+	    android:background="@drawable/transparent_button"/>
+	
+	<ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:src="@drawable/solid_holo_blue" />
+	
+	<Button 
+	    android:id="@+id/dialog_addfavorite"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dip"
+	    android:layout_weight="1"
+	    android:paddingLeft="20dip"
+	    android:paddingRight="20dip"
+	    android:paddingTop="20dip"
+	    android:paddingBottom="20dip"
+	    android:text="@string/locationaction_dialog_favorite"
+	    android:textSize="20sp"
+	    android:background="@drawable/transparent_button"/>
+
+</LinearLayout>
