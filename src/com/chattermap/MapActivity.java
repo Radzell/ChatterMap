@@ -85,26 +85,26 @@ public class MapActivity extends Activity implements LocationListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_maplayout, menu);
-		
-		// Add a listener to the add button to open a dialog for an action to 
-		// perform at current location
-		MenuItem shareButton = (MenuItem) menu.findItem(R.id.menu_add);
-		shareButton.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				// If no current location, show an error message and do nothing
-				if( mCurrentLocation == null ) {
-					Toast.makeText(getApplicationContext(), "Haven't been able " +
-							"to obtain current location yet!", Toast.LENGTH_SHORT).show();
-				} else {
-					LocationActionDialog lad = new LocationActionDialog(MapActivity.this, 
-							mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-					lad.show();
-				}
-				return true;
-			}
-		});
 		return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureid, MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.menu_add:
+			// If no current location, show an error message and do nothing
+			if( mCurrentLocation == null ) {
+				Toast.makeText(getApplicationContext(), "Haven't been able " +
+						"to obtain current location yet!", Toast.LENGTH_SHORT).show();
+			} else {
+				// open a dialog for an action to perform at current location
+				LocationActionDialog lad = new LocationActionDialog(MapActivity.this, 
+						mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+				lad.show();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**

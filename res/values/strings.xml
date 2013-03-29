@@ -32,6 +32,9 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <string name="locationaction_dialog_favorite">Add Location to Favorites</string>
     <string name="locationaction_toast_add_location">Favorite locations currently unsupported, sorry! :[</string>
     
+    <!-- Group List Strings -->
+    <string name="menu_grouplist_addgroup">Add Group</string>
+    
     <!-- Location Dialog Fragment Strings -->
     <string name="location_dialog_message">
         Location services are currently disabled, but highly recommended.

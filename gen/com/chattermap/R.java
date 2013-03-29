@@ -139,32 +139,36 @@ containing a value of this type.
         public static final int dialog_addfavorite=0x7f040006;
         public static final int dialog_sharenote=0x7f040005;
         public static final int hybrid=0x7f040004;
-        public static final int login_accountlist=0x7f04000d;
-        public static final int login_separator=0x7f04000c;
-        public static final int map=0x7f04000e;
-        public static final int menu_add=0x7f040011;
-        public static final int menu_attach=0x7f040010;
-        public static final int menu_settings=0x7f040012;
-        public static final int menu_submit=0x7f04000f;
+        public static final int login_accountlist=0x7f04000e;
+        public static final int login_separator=0x7f04000d;
+        public static final int mainlist=0x7f04000a;
+        public static final int map=0x7f04000f;
+        public static final int menu_add=0x7f040013;
+        public static final int menu_addgroup=0x7f040012;
+        public static final int menu_attach=0x7f040011;
+        public static final int menu_settings=0x7f040014;
+        public static final int menu_submit=0x7f040010;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
         public static final int screen_editnote_rl=0x7f040007;
         public static final int share_spinner=0x7f040009;
         public static final int terrain=0x7f040003;
-        public static final int textview_chooseaccount=0x7f04000b;
-        public static final int textview_disclaimer=0x7f04000a;
+        public static final int textview_chooseaccount=0x7f04000c;
+        public static final int textview_disclaimer=0x7f04000b;
         public static final int textview_share=0x7f040008;
     }
     public static final class layout {
         public static final int dialog_locationaction=0x7f030000;
         public static final int screen_editnote=0x7f030001;
-        public static final int screen_login=0x7f030002;
-        public static final int screen_maplayout=0x7f030003;
+        public static final int screen_list=0x7f030002;
+        public static final int screen_login=0x7f030003;
+        public static final int screen_maplayout=0x7f030004;
     }
     public static final class menu {
         public static final int menu_editnote=0x7f070000;
-        public static final int menu_maplayout=0x7f070001;
+        public static final int menu_grouplist=0x7f070001;
+        public static final int menu_maplayout=0x7f070002;
     }
     public static final class string {
         /**  Activity Names 
@@ -244,9 +248,9 @@ containing a value of this type.
         public static final int editnote_submit=0x7f05001a;
         /**  Location Dialog Fragment Strings 
          */
-        public static final int location_dialog_message=0x7f050022;
-        public static final int location_dialog_negative_button=0x7f050024;
-        public static final int location_dialog_positive_button=0x7f050023;
+        public static final int location_dialog_message=0x7f050023;
+        public static final int location_dialog_negative_button=0x7f050025;
+        public static final int location_dialog_positive_button=0x7f050024;
         public static final int locationaction_dialog_favorite=0x7f050020;
         /**  Location Action Dialog Strings 
          */
@@ -260,8 +264,11 @@ containing a value of this type.
         /**  Map Screen Strings 
          */
         public static final int menu_add=0x7f050016;
+        /**  Group List Strings 
+         */
+        public static final int menu_grouplist_addgroup=0x7f050022;
         public static final int menu_settings=0x7f050017;
-        public static final int no_location_message=0x7f050025;
+        public static final int no_location_message=0x7f050026;
     }
     public static final class style {
         /** 
