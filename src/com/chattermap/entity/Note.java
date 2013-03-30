@@ -6,6 +6,7 @@ import com.orm.androrm.Model;
 import com.orm.androrm.field.CharField;
 import com.orm.androrm.field.ForeignKeyField;
 import com.orm.androrm.field.LocationField;
+import com.parse.ParseObject;
 
 /**
  * Notes class that will be used to save to local disk TODO write update method
@@ -16,7 +17,7 @@ import com.orm.androrm.field.LocationField;
  */
 public class Note extends Model {
 
-	protected CharField ID;
+	protected CharField mObjectID;
 	protected CharField mTitle;
 	protected CharField mBody;
 
@@ -26,11 +27,11 @@ public class Note extends Model {
 	protected ForeignKeyField<Group> mGroup;
 
 	public String getID() {
-		return ID.get();
+		return mObjectID.get();
 	}
 
 	public void setID(String mID) {
-		this.ID.set(mID);
+		this.mObjectID.set(mID);
 	}
 
 	public String getTitle() {
@@ -60,7 +61,7 @@ public class Note extends Model {
 	public Note() {
 		super();
 
-		ID = new CharField();
+		mObjectID = new CharField();
 		mTitle = new CharField();
 		mBody = new CharField();
 
@@ -69,6 +70,31 @@ public class Note extends Model {
 
 	public void setBody(String body) {
 		mBody.set(body);
+	}
+
+	/**
+	 * Static way of creating a note on the server
+	 * 
+	 * @param title
+	 * @param body
+	 * @param lat
+	 * @param longit
+	 */
+	public static void create(String title, String body, int lat, int longit,
+			Group group) {
+		ParseObject poGroup = new ParseObject("Group");
+
+		poGroup.setObjectId(group.getID());
+		poGroup.put("Name", group.getName());
+		poGroup.put("Description", group.getDescription());
+
+		ParseObject po = new ParseObject("Note");
+		po.put("mTitle", title);
+		po.put("mBody", title);
+		po.put("mLat", lat);
+		po.put("mLongit", longit);
+		po.put("parent", poGroup);
+		po.saveEventually();
 	}
 
 }
