@@ -1,10 +1,15 @@
 package com.chattermap;
 
+import java.security.spec.MGF1ParameterSpec;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 
@@ -18,19 +23,70 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class MapActivity extends Activity {
+public class MapActivity extends FragmentActivity {
+	Group mCurrentGroup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maplayout);
 		setupDB();
-		createTestGroup();
-		createTestNoteInGroup();
+		loadPublicGroup(true);
 	}
 
-	private void createTestNoteInGroup() {
-		// TODO Auto-generated method stub
+	private void saveNote(final String title, final String body, final int lat,
+			final int longit) {
+		Note.create(title, body, lat, longit, mCurrentGroup);
+	}
+
+	private void loadPublicGroup(boolean b) {
+		final ProgressDialog pd = ProgressDialog.show(MapActivity.this,
+				"Loading...", "Working");
+		new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					loadPublicGroup();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				saveNote("Second Note title", "This is our second Note", 0, 0);
+				pd.dismiss();
+			};
+
+		}.execute();
+
+	}
+
+	/**
+	 * Loads the initial public group
+	 * 
+	 * @throws ParseException
+	 */
+	private void loadPublicGroup() throws ParseException {
+		Group mGroup = Group.find("Public", getApplicationContext());
+		if (mGroup == null) {
+			final ParseQuery query = new ParseQuery("Group");
+			query.whereEqualTo("Name", "Public");
+			ParseObject ob = query.getFirst();
+			Log.i("TAG", ob.getObjectId());
+			Log.i("TAG", ob.getString("Name"));
+			Log.i("TAG", ob.getString("Description"));
+
+			Group group = new Group();
+			group.setID(ob.getObjectId());
+			group.setName(ob.getString("Name"));
+			group.setDescription(ob.getString("Description"));
+			// group.save(MapActivity.this);
+			mCurrentGroup = group;
+		}
 
 	}
 
