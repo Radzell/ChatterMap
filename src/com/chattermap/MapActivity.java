@@ -23,7 +23,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class MapActivity extends FragmentActivity {
+public class MapActivity extends Activity {
 	Group mCurrentGroup;
 
 	@Override
