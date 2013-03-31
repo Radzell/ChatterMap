@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout
+        android:id="@+id/screen_editnote_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
+        
+        <TextView
+            android:id="@+id/textview_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editnote_share"
+            android:textSize="20sp"
+            android:paddingLeft="15dip"
+            android:paddingTop="15dip"
+            android:layout_alignParentLeft="true"
+            android:focusable="false"/>
+        
+        <Spinner 
+            android:id="@+id/share_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/textview_share"
+            android:paddingTop="15dip" />
+    </RelativeLayout>
+   
+    <EditText 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/editnote_edit"
+        android:minLines="6"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:gravity="top|left"
+        android:layout_below="@id/screen_editnote_rl"
+        android:layout_alignParentBottom="true"
+        android:inputType="textMultiLine"/>
+
+</RelativeLayout>

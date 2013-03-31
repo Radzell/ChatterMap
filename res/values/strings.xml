@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity Names -->
+    <string name="app_name">ChatterMap</string>
+<<<<<<< HEAD
+    <string name="hello_world">Hello world!</string>
+=======
+    <string name="edit_note">Edit Note</string>
+    
+    <!-- Login Screen Strings -->
+    <string name="login_disclaimer">
+        You can use your Google account to login to ChatterMap easily!
+        
+Don\'t worry!  Your account will only be used internally to keep track of which notes are yours or shared with you, but this information will never be displayed.
+    </string>
+    <string name="login_chooseaccount">Choose your Google account:</string>
+    <string name="login_createusername">Pick a public username:</string>
+    
+    <!-- Map Screen Strings -->
+    <string name="menu_add">Add Note or Save Current Location</string>
+>>>>>>> origin/grouplist
+    <string name="menu_settings">Settings</string>
+    
+    <!--  Edit Note Screen Strings -->
+    <string name="editnote_share">Share With : </string>
+    <string name="editnote_edit">Edit note text &#8230;</string>
+    <string name="editnote_submit">Submit Note</string>
+    <string name="editnote_attach">Attach an Image</string>
+
+<<<<<<< HEAD
+=======
+    <!-- Location Action Dialog Strings -->
+    <string name="locationaction_dialog_share">Share Note Here</string>
+    <string name="locationaction_dialog_favorite">Add Location to Favorites</string>
+    <string name="locationaction_toast_add_location">Favorite locations currently unsupported, sorry! :[</string>
+    
+    <!-- Group List Strings -->
+    <string name="menu_grouplist_addgroup">Add Group</string>
+    
+    <!-- Location Dialog Fragment Strings -->
+    <string name="location_dialog_message">
+        Location services are currently disabled, but highly recommended.
+    </string>
+    <string name="location_dialog_positive_button">Go to Location Settings</string>
+    <string name="location_dialog_negative_button">Leave Location Services Disabled</string>
+    <string name="no_location_message">May not have accurate location data</string>
+>>>>>>> origin/grouplist
+</resources>

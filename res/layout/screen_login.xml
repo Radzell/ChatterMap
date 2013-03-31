@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="5dip"
+    android:paddingLeft="5dip"
+    android:paddingRight="5dip"
+    android:paddingBottom="5dip" >
+    
+    <!-- Show a disclaimer about what the account will be used for -->
+	<TextView
+	    android:id="@+id/textview_disclaimer" 
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:layout_alignParentTop="true"
+	    android:text="@string/login_disclaimer"
+	    android:textSize="16sp"/>
+	
+	<!-- Simple separator -->
+	<TextView
+		android:id="@+id/textview_chooseaccount"	    
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_disclaimer"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="20dip"
+        android:text="@string/login_chooseaccount"
+        android:textColor="#FF33B5E5"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/login_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/textview_chooseaccount"
+        android:src="@drawable/solid_holo_blue" />
+    
+    <!-- Displays a list of Google accounts stored on this device -->
+    <ListView
+        android:id="@+id/login_accountlist" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_separator">
+  
+    </ListView>
+    
+    <!-- TODO: "Casual mode" button (i.e. don't provide account)? -->
+</RelativeLayout>
