@@ -3,9 +3,7 @@
 
     <!-- Activity Names -->
     <string name="app_name">ChatterMap</string>
-<<<<<<< HEAD
-    <string name="hello_world">Hello world!</string>
-=======
+
     <string name="edit_note">Edit Note</string>
     
     <!-- Login Screen Strings -->
@@ -19,7 +17,6 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     
     <!-- Map Screen Strings -->
     <string name="menu_add">Add Note or Save Current Location</string>
->>>>>>> origin/grouplist
     <string name="menu_settings">Settings</string>
     
     <!--  Edit Note Screen Strings -->
@@ -27,9 +24,10 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <string name="editnote_edit">Edit note text &#8230;</string>
     <string name="editnote_submit">Submit Note</string>
     <string name="editnote_attach">Attach an Image</string>
+	<string name="editnote_latitude">latitude</string>
+    <string name="editnote_longitude">longitude</string>
+    <string name="editnote_id">noteid</string>	
 
-<<<<<<< HEAD
-=======
     <!-- Location Action Dialog Strings -->
     <string name="locationaction_dialog_share">Share Note Here</string>
     <string name="locationaction_dialog_favorite">Add Location to Favorites</string>
@@ -45,5 +43,4 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <string name="location_dialog_positive_button">Go to Location Settings</string>
     <string name="location_dialog_negative_button">Leave Location Services Disabled</string>
     <string name="no_location_message">May not have accurate location data</string>
->>>>>>> origin/grouplist
 </resources>

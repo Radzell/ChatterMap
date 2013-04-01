@@ -24,7 +24,7 @@ public class Note extends Model {
 	protected LocationField mLocation;
 
 	// Link the Group model to the Note model.
-	protected ForeignKeyField<Group> mGroup;
+	protected ForeignKeyField<ChatGroup> mGroup;
 
 	public String getID() {
 		return mObjectID.get();
@@ -50,11 +50,11 @@ public class Note extends Model {
 		this.mLocation.set(mLocation);
 	}
 
-	public Group getGroup() {
+	public ChatGroup getGroup() {
 		return mGroup.get();
 	}
 
-	public void setGroup(Group mGroup) {
+	public void setGroup(ChatGroup mGroup) {
 		this.mGroup.set(mGroup);
 	}
 
@@ -65,7 +65,7 @@ public class Note extends Model {
 		mTitle = new CharField();
 		mBody = new CharField();
 
-		mGroup = new ForeignKeyField<Group>(Group.class);
+		mGroup = new ForeignKeyField<ChatGroup>(ChatGroup.class);
 	}
 
 	public void setBody(String body) {
@@ -77,22 +77,22 @@ public class Note extends Model {
 	 * 
 	 * @param title
 	 * @param body
-	 * @param lat
-	 * @param longit
+	 * @param mLat
+	 * @param mLong
 	 */
-	public static void create(String title, String body, int lat, int longit,
-			Group group) {
+	public static void create(String title, String body, double mLat,
+			double mLong, ChatGroup group) {
 		ParseObject poGroup = new ParseObject("Group");
 
-		poGroup.setObjectId(group.getID());
+		poGroup.setObjectId(group.getObjectID());
 		poGroup.put("Name", group.getName());
 		poGroup.put("Description", group.getDescription());
 
 		ParseObject po = new ParseObject("Note");
 		po.put("mTitle", title);
 		po.put("mBody", title);
-		po.put("mLat", lat);
-		po.put("mLongit", longit);
+		po.put("mLat", mLat);
+		po.put("mLongit", mLong);
 		po.put("parent", poGroup);
 		po.saveEventually();
 	}

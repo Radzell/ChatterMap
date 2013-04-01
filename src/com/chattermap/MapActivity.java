@@ -1,6 +1,5 @@
 package com.chattermap;
 
-import java.security.spec.MGF1ParameterSpec;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,18 +8,17 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
-<<<<<<< HEAD
-=======
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
->>>>>>> origin/grouplist
 
-import com.chattermap.entity.Group;
+import com.chattermap.entity.ChatGroup;
 import com.chattermap.entity.Note;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
@@ -29,19 +27,19 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class MapActivity extends Activity {
-	Group mCurrentGroup;
+public class MapActivity extends Activity implements OnMapLongClickListener {
+	ChatGroup mCurrentGroup;
+	private GoogleMap mMap;
+	private Location mCurrentLocation = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-		setContentView(R.layout.maplayout);
-=======
+
 		setContentView(R.layout.screen_maplayout);
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		mMap.setOnMapLongClickListener(new MapScreenLongClickListener(this));
->>>>>>> origin/grouplist
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
+		mMap.setOnMapLongClickListener(this);
 		setupDB();
 		loadPublicGroup(true);
 	}
@@ -83,7 +81,7 @@ public class MapActivity extends Activity {
 	 * @throws ParseException
 	 */
 	private void loadPublicGroup() throws ParseException {
-		Group mGroup = Group.find("Public", getApplicationContext());
+		ChatGroup mGroup = ChatGroup.findByName("Public", getApplicationContext());
 		if (mGroup == null) {
 			final ParseQuery query = new ParseQuery("Group");
 			query.whereEqualTo("Name", "Public");
@@ -92,64 +90,41 @@ public class MapActivity extends Activity {
 			Log.i("TAG", ob.getString("Name"));
 			Log.i("TAG", ob.getString("Description"));
 
-			Group group = new Group();
-			group.setID(ob.getObjectId());
+			ChatGroup group = new ChatGroup();
+			group.setObjectID(ob.getObjectId());
 			group.setName(ob.getString("Name"));
 			group.setDescription(ob.getString("Description"));
-			// group.save(MapActivity.this);
+			group.save(MapActivity.this);
 			mCurrentGroup = group;
 		}
-
-	}
-
-	/**
-	 * Test for creating public group.
-	 * 
-	 * @throws ParseException
-	 */
-	private void createTestGroup() {
-		// Create public group is not created
-		final ParseQuery query = new ParseQuery("Group");
-		query.whereEqualTo("Name", "Public");
-		query.getFirstInBackground(new GetCallback() {
-
-			@Override
-			public void done(ParseObject object, ParseException e) {
-				if (e == null) {
-
-					Log.i("ChatterMap", "Public Exist");
-				} else {
-					ParseObject publicGroup = new ParseObject("Group");
-					publicGroup.put("Name", "Public");
-					publicGroup.put("Description", "Group For Public Use");
-					publicGroup.saveInBackground();
-					Log.i("ChatterMap", "Public Created");
-				}
-			}
-		});
 
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.maplayout, menu);
+		getMenuInflater().inflate(R.menu.menu_maplayout, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureid, MenuItem item) {
-		switch(item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.menu_add:
 			// If no current location, show an error message and do nothing
-			if( mCurrentLocation == null ) {
-				Toast.makeText(getApplicationContext(), "Haven't been able " +
-						"to obtain current location yet!", Toast.LENGTH_SHORT).show();
+			if (mCurrentLocation == null) {
+				Toast.makeText(
+						getApplicationContext(),
+						"Haven't been able "
+								+ "to obtain current location yet!",
+						Toast.LENGTH_SHORT).show();
 			} else {
 				// open a dialog for an action to perform at current location
-				LocationActionDialog lad = new LocationActionDialog(MapActivity.this, 
-						mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-				lad.show();
+				/*
+				 * LocationActionDialog lad = new LocationActionDialog(
+				 * MapActivity.this, mCurrentLocation.getLatitude(),
+				 * mCurrentLocation.getLongitude()); lad.show();
+				 */
 			}
 			return true;
 		}
@@ -163,12 +138,12 @@ public class MapActivity extends Activity {
 	 */
 	public void update() throws ParseException {
 		// Getting the group from the database
-		List<Group> groups = Group.getGroups(this).all().toList();
+		List<ChatGroup> groups = ChatGroup.getGroups(this).all().toList();
 
-		for (final Group group : groups) {
+		for (final ChatGroup group : groups) {
 			// Find all notes by the current group
 			final ParseQuery query = new ParseQuery("Note");
-			query.whereEqualTo("objectid", group.getID());
+			query.whereEqualTo("objectid", group.getObjectID());
 			query.findInBackground(new FindCallback() {
 
 				@Override
@@ -184,6 +159,30 @@ public class MapActivity extends Activity {
 	}
 
 	/**
+	 * Updates the notes for projects in the databases Call in background only
+	 * 
+	 * @throws ParseException
+	 */
+	public void update(final ChatGroup group) throws ParseException {
+		// Getting the group from the database
+
+		// Find all notes by the current group
+		final ParseQuery query = new ParseQuery("Note");
+		query.whereEqualTo("objectid", group.getObjectID());
+		query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					List<ParseObject> notes = objects;
+					saveNotes(notes, group);
+				}
+			}
+		});
+
+	}
+
+	/**
 	 * Save notes to a group
 	 * 
 	 * @param notes
@@ -191,7 +190,7 @@ public class MapActivity extends Activity {
 	 * @param group
 	 *            that the notes belong to
 	 */
-	private void saveNotes(List<ParseObject> notes, Group group) {
+	private void saveNotes(List<ParseObject> notes, ChatGroup group) {
 		for (ParseObject po : notes) {
 			Note note = new Note();
 			note.setID(po.getObjectId());
@@ -208,9 +207,19 @@ public class MapActivity extends Activity {
 		DatabaseAdapter.setDatabaseName("chattermapdb");
 
 		List<Class<? extends Model>> models = new ArrayList<Class<? extends Model>>();
-		models.add(Group.class);
+		models.add(ChatGroup.class);
 		models.add(Note.class);
 		DatabaseAdapter adapter = DatabaseAdapter.getInstance(this);
 		adapter.setModels(models);
+	}
+
+	@Override
+	public void onMapLongClick(LatLng loc) {
+		// TODO: Use the stored activity to launch the "choose action" dialog
+		Log.d("LONG PRESS", "Long press at: (" + loc.latitude + ", "
+				+ loc.longitude + ")");
+		LocationActionDialog lad = new LocationActionDialog(this,
+				mCurrentGroup, loc.latitude, loc.longitude);
+		lad.show();
 	}
 }
