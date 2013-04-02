@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.chattermap.entity.ChatGroup;
 import com.chattermap.entity.Note;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
@@ -26,7 +29,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class MapActivity extends Activity implements OnMapLongClickListener {
+public class MapActivity extends Activity implements OnMapLongClickListener,
+		LocationListener {
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
@@ -38,9 +42,21 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 		setContentView(R.layout.screen_maplayout);
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
 		setupDB();
 		loadPublicGroup(true);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Attempt to retrieve the current location
+		setCurrentLocation(LocationUtils.getCurrentLocation(this, this));
+		if (getCurrentLocation() != null) {
+			setMapTarget(getCurrentLocation());
+		}
 	}
 
 	private void saveNote(final String title, final String body, final int lat,
@@ -111,7 +127,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 		switch (item.getItemId()) {
 		case R.id.menu_add:
 			// If no current location, show an error message and do nothing
-			if (mCurrentLocation == null) {
+			if (getCurrentLocation() == null) {
 				Toast.makeText(
 						getApplicationContext(),
 						"Haven't been able "
@@ -121,8 +137,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 				// open a dialog for an action to perform at current location
 				LocationActionDialog lad = new LocationActionDialog(
 						MapActivity.this, mCurrentGroup,
-						mCurrentLocation.getLatitude(),
-						mCurrentLocation.getLongitude());
+						getCurrentLocation().getLatitude(),
+						getCurrentLocation().getLongitude());
 				lad.show();
 			}
 			return true;
@@ -207,5 +223,71 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 		LocationActionDialog lad = new LocationActionDialog(this,
 				mCurrentGroup, loc.latitude, loc.longitude);
 		lad.show();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		if (location == null)
+			return;
+
+		// If the new update is more accurate, update the current location
+		if (getCurrentLocation() == null
+				|| location.getAccuracy() < getCurrentLocation().getAccuracy()) {
+			setCurrentLocation(location);
+			setMapTarget(location);
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
+
+	/**
+	 * Sets the maps camera to focus on the given location. Also sets the zoom
+	 * level to an appropriate zoomed in state if a zoom hasn't yet been set.
+	 * 
+	 * @param loc
+	 *            {@link Location} to set the camera's position to
+	 */
+	private void setMapTarget(Location loc) {
+		if (mMap != null) {
+			float zoom = mMap.getCameraPosition().zoom;
+
+			// TODO: Should this be if zoom == GoogleMap.getMaxZoomLevel() ?
+			// TODO: Zoom 17 was chosen because that's the first zoom level at
+			// which buildings can be seen, should this be different?
+			zoom = zoom < 17.0f ? 17.0f : zoom;
+			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(new LatLng(
+					loc.getLatitude(), loc.getLongitude()), zoom);
+			mMap.moveCamera(npos);
+		}
+	}
+
+	/**
+	 * Retrieves the applications idea of the user's current location
+	 * 
+	 * @return {@link Location} object representing the user's current location
+	 */
+	public Location getCurrentLocation() {
+		return mCurrentLocation;
+	}
+
+	/**
+	 * Sets the current {@link Location} to a new location and update the map's
+	 * current location marker as well.
+	 * 
+	 * @param loc
+	 *            New current {@link Location}
+	 */
+	public void setCurrentLocation(Location loc) {
+		mCurrentLocation = loc;
 	}
 }
