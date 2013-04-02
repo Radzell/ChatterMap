@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -81,8 +80,9 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 	 * @throws ParseException
 	 */
 	private void loadPublicGroup() throws ParseException {
-		ChatGroup mGroup = ChatGroup.findByName("Public", getApplicationContext());
-		if (mGroup == null) {
+		ChatGroup group = ChatGroup.findByName("Public",
+				getApplicationContext());
+		if (group == null) {
 			final ParseQuery query = new ParseQuery("Group");
 			query.whereEqualTo("Name", "Public");
 			ParseObject ob = query.getFirst();
@@ -90,14 +90,13 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 			Log.i("TAG", ob.getString("Name"));
 			Log.i("TAG", ob.getString("Description"));
 
-			ChatGroup group = new ChatGroup();
+			group = new ChatGroup();
 			group.setObjectID(ob.getObjectId());
 			group.setName(ob.getString("Name"));
 			group.setDescription(ob.getString("Description"));
 			group.save(MapActivity.this);
-			mCurrentGroup = group;
 		}
-
+		mCurrentGroup = group;
 	}
 
 	@Override
@@ -120,11 +119,11 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 						Toast.LENGTH_SHORT).show();
 			} else {
 				// open a dialog for an action to perform at current location
-				/*
-				 * LocationActionDialog lad = new LocationActionDialog(
-				 * MapActivity.this, mCurrentLocation.getLatitude(),
-				 * mCurrentLocation.getLongitude()); lad.show();
-				 */
+				LocationActionDialog lad = new LocationActionDialog(
+						MapActivity.this, mCurrentGroup,
+						mCurrentLocation.getLatitude(),
+						mCurrentLocation.getLongitude());
+				lad.show();
 			}
 			return true;
 		}
@@ -141,20 +140,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 		List<ChatGroup> groups = ChatGroup.getGroups(this).all().toList();
 
 		for (final ChatGroup group : groups) {
-			// Find all notes by the current group
-			final ParseQuery query = new ParseQuery("Note");
-			query.whereEqualTo("objectid", group.getObjectID());
-			query.findInBackground(new FindCallback() {
-
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					if (e == null) {
-						List<ParseObject> notes = objects;
-						saveNotes(notes, group);
-					}
-				}
-			});
-
+			update(group);
 		}
 	}
 
