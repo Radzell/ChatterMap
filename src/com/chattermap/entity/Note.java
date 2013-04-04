@@ -72,7 +72,7 @@ public class Note extends Model {
 		mObjectID = new CharField();
 		mTitle = new CharField();
 		mBody = new CharField();
-
+		mLocation = new LocationField();
 		mGroup = new ForeignKeyField<ChatGroup>(ChatGroup.class);
 	}
 

@@ -70,11 +70,13 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            {@link Note} object to add to the map
 	 */
 	private void addNoteToMap(Note note) {
-		Log.i("NOTES", "Adding note with body: \"" + note.getBody() + "\" to map");
 		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
 				.getLocation().getLongitude());
-		mMap.addMarker(new MarkerOptions().position(loc).title(note.getTitle())
-				.snippet(note.getBody()));
+		Log.i("MAPNOTE",
+				"Title: \"" + note.getTitle() + "\" Body:\"" + note.getBody()
+						+ "\" at (" + String.valueOf(loc.latitude) + ","
+						+ String.valueOf(loc.longitude) + ")");
+		mMap.addMarker(new MarkerOptions().position(loc).title(note.getBody()));
 	}
 
 	private void saveNote(final String title, final String body,
@@ -115,18 +117,14 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 	}
 
-	// Called when ready to display
+	// Called when ready to display notes
 	private void displayNotes() {
-		Log.i("NOTES",
-				"Displaying group: \""
-						+ mCurrentGroup.getName()
-						+ "\" with "
-						+ String.valueOf(mCurrentGroup
-								.getNotes(getApplicationContext()).toList()
-								.size()) + " notes");
+		List<Note> notes = mCurrentGroup.getNotes(getApplicationContext())
+				.toList();
+		Log.i("GROUP", "Displaying group: \"" + mCurrentGroup.getName()
+				+ "\" with " + String.valueOf(notes.size()) + " notes");
 		mMap.clear();
-		for (Note note : mCurrentGroup.getNotes(getApplicationContext())
-				.toList()) {
+		for (Note note : notes) {
 			addNoteToMap(note);
 		}
 	}
@@ -258,7 +256,10 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				note.setGroup(group);
 				note.setTitle(po.getString("mTitle"));
 				note.setBody(po.getString("mBody"));
-
+				Location lo = new Location("GPS");
+				lo.setLatitude(po.getDouble("mLat"));
+				lo.setLongitude(po.getDouble("mLongit"));
+				note.setLocation(lo);
 				note.save(MapActivity.this);
 			} else {
 				Log.i("Test", "not empty");
@@ -270,10 +271,16 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case RESULT_OK:
-			Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
+			try {
+				update(mCurrentGroup);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
 			break;
 		case RESULT_CANCELED:
-			Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
