@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.androrm.DatabaseAdapter;
+import com.orm.androrm.Filter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -68,6 +70,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            {@link Note} object to add to the map
 	 */
 	private void addNoteToMap(Note note) {
+		Log.i("NOTES", "Adding note with body: \"" + note.getBody() + "\" to map");
 		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
 				.getLocation().getLongitude());
 		mMap.addMarker(new MarkerOptions().position(loc).title(note.getTitle())
@@ -98,13 +101,34 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 			@Override
 			protected void onPostExecute(Void result) {
-				saveNote("Second Note title", "This is our second Note", 0.0d,
-						0.0d);
+				try {
+					update(mCurrentGroup);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				displayNotes();
 				pd.dismiss();
 			};
 
 		}.execute();
 
+	}
+
+	// Called when ready to display
+	private void displayNotes() {
+		Log.i("NOTES",
+				"Displaying group: \""
+						+ mCurrentGroup.getName()
+						+ "\" with "
+						+ String.valueOf(mCurrentGroup
+								.getNotes(getApplicationContext()).toList()
+								.size()) + " notes");
+		mMap.clear();
+		for (Note note : mCurrentGroup.getNotes(getApplicationContext())
+				.toList()) {
+			addNoteToMap(note);
+		}
 	}
 
 	/**
@@ -173,7 +197,20 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		List<ChatGroup> groups = ChatGroup.getGroups(this).all().toList();
 
 		for (final ChatGroup group : groups) {
-			update(group);
+			// Find all notes by the current group
+			final ParseQuery query = new ParseQuery("Note");
+			query.whereEqualTo("parent", group.getObjectID());
+			query.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null) {
+						List<ParseObject> notes = objects;
+						saveNotes(notes, group);
+					}
+				}
+			});
+
 		}
 	}
 
@@ -187,23 +224,18 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 		// Find all notes by the current group
 		final ParseQuery query = new ParseQuery("Note");
-		query.whereEqualTo("objectid", group.getObjectID());
 		query.findInBackground(new FindCallback() {
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
 					List<ParseObject> notes = objects;
+
 					saveNotes(notes, group);
+					displayNotes();
 				}
 			}
 		});
-		List<Note> notes = mCurrentGroup.getNotes(getApplicationContext())
-				.all().toList();
-		Log.d("NOTES", String.valueOf(notes.size()));
-		for (Note n : notes) {
-			Log.d("NOTES", n.getBody());
-		}
 	}
 
 	/**
@@ -215,13 +247,36 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            that the notes belong to
 	 */
 	private void saveNotes(List<ParseObject> notes, ChatGroup group) {
+
 		for (ParseObject po : notes) {
-			Note note = new Note();
-			note.setID(po.getObjectId());
-			note.setGroup(group);
-			note.setTitle(po.getString("Title"));
-			note.setBody(po.getString("Body"));
+			if (group.getNotes(this)
+					.filter(new Filter().is("mObjectID", po.getObjectId()))
+					.isEmpty()) {
+				Log.i("Test", "empty");
+				Note note = new Note();
+				note.setID(po.getObjectId());
+				note.setGroup(group);
+				note.setTitle(po.getString("mTitle"));
+				note.setBody(po.getString("mBody"));
+
+				note.save(MapActivity.this);
+			} else {
+				Log.i("Test", "not empty");
+			}
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case RESULT_OK:
+			Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
+			break;
+		case RESULT_CANCELED:
+			Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
