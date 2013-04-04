@@ -90,8 +90,10 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 		for (Note note : notes) {
 			LatLng latlng = new LatLng(note.getLocation().getLatitude(), note
 					.getLocation().getLongitude());
+			Log.i("Test", "location: " + latlng.latitude + ":"
+					+ latlng.longitude);
 			MarkerOptions startMarker = new MarkerOptions().position(latlng)
-					.title("Start");
+					.title(note.getBody());
 			mMap.addMarker(startMarker);
 		}
 	}
@@ -229,7 +231,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 				note.setBody(po.getString("mBody"));
 				Location lo = new Location("GPS");
 				lo.setLatitude(po.getDouble("mLat"));
-				lo.setLatitude(po.getDouble("mLongit"));
+				lo.setLongitude(po.getDouble("mLongit"));
 				note.setLocation(lo);
 				note.save(MapActivity.this);
 			} else {
