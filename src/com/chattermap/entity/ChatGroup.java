@@ -25,6 +25,10 @@ public class ChatGroup extends Model {
 
 	protected OneToManyField<ChatGroup, Note> mNotes;
 
+	public QuerySet<Note> getNotes(Context context) {
+		return mNotes.get(context, this);
+	}
+
 	public String getName() {
 		return mName.get();
 	}

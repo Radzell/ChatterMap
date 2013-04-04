@@ -2,9 +2,11 @@ package com.chattermap;
 
 import com.chattermap.entity.ChatGroup;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 
 public class LocationActionDialog extends Dialog {
 	private double mLat, mLong;
-	private final Context mContext;
+	private final Activity mContext;
 
 	/**
 	 * Creates a LocationActionDialog that asks the user if they want to share a
@@ -27,7 +29,7 @@ public class LocationActionDialog extends Dialog {
 	 * @param longitude
 	 *            Longitude of the location of the action
 	 */
-	public LocationActionDialog(Context context, final ChatGroup group,
+	public LocationActionDialog(Activity context, final ChatGroup group,
 			double latitude, double longitude) {
 		super(context);
 
@@ -56,7 +58,8 @@ public class LocationActionDialog extends Dialog {
 				editIntent.putExtra(mContext.getString(R.string.editnote_id),
 						"empty");
 				editIntent.putExtra("groupid", group.getObjectID());
-				mContext.startActivity(editIntent);
+
+				mContext.startActivityForResult(editIntent, 0);
 
 				LocationActionDialog.this.dismiss();
 			}
@@ -72,6 +75,22 @@ public class LocationActionDialog extends Dialog {
 				LocationActionDialog.this.dismiss();
 			}
 		});
-	}
+		new AsyncTask<Void, Void, Void>() {
 
+			@Override
+			protected Void doInBackground(Void... params) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			protected void onPreExecute() {
+			};
+
+			@Override
+			protected void onPostExecute(Void result) {
+			};
+
+		}.execute();
+	}
 }

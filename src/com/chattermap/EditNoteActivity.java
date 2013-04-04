@@ -9,11 +9,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditNoteActivity extends Activity {
-	private double mLat, mLong;
-	private String mId = null;
-	private String mGroupId;
+	private static double mLat, mLong;
+	private static String mId = null;
+	private static String mGroupId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,13 @@ public class EditNoteActivity extends Activity {
 			if (et.length() > 0) {
 				ChatGroup group = ChatGroup.findByID(mGroupId, this);
 				Note.create("", et.getText().toString(), mLat, mLong, group);
+				setResult(RESULT_OK);
+			} else {
+				setResult(RESULT_CANCELED);
 			}
+
 			// Finish the activity!
-			// this.finish();
+			finish();
 			break;
 		case R.id.menu_attach:
 			// TODO: Open dialog to attach a picture

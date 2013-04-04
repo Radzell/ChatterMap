@@ -21,6 +21,14 @@ public class Note extends Model {
 	protected CharField mTitle;
 	protected CharField mBody;
 
+	public String getBody() {
+		return mBody.get();
+	}
+
+	public void setBody(String mBody) {
+		this.mBody.set(mBody);
+	}
+
 	protected LocationField mLocation;
 
 	// Link the Group model to the Note model.
@@ -68,10 +76,6 @@ public class Note extends Model {
 		mGroup = new ForeignKeyField<ChatGroup>(ChatGroup.class);
 	}
 
-	public void setBody(String body) {
-		mBody.set(body);
-	}
-
 	/**
 	 * Static way of creating a note on the server
 	 * 
@@ -90,7 +94,7 @@ public class Note extends Model {
 
 		ParseObject po = new ParseObject("Note");
 		po.put("mTitle", title);
-		po.put("mBody", title);
+		po.put("mBody", body);
 		po.put("mLat", mLat);
 		po.put("mLongit", mLong);
 		po.put("parent", poGroup);
