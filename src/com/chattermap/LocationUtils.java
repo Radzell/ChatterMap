@@ -9,8 +9,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.util.Log;
-import android.widget.Toast;
 
+/**
+ * Utility class for location based operations like getting current location,
+ * accessing LocationServices, and prompting the user to enable higher accuracy
+ * precision on their device.
+ */
 public class LocationUtils {
 
 	/**
@@ -36,7 +40,7 @@ public class LocationUtils {
 		// TODO: require a certain level of accuracy from the providers?
 		Criteria criteria = new Criteria();
 		List<String> providers = locationManager.getProviders(criteria, true);
-		
+
 		Log.d("LOCATIONSERVICES", String.valueOf(providers.size()));
 		if (providers != null && providers.size() > 0) {
 			// Get the most recent last known location, and set the map to view
@@ -59,9 +63,8 @@ public class LocationUtils {
 			return newestLocation;
 		}
 
-		// TODO: Should this be here, or should it be up to use whether or not
-		// to
-		// show the dialog.
+		// TODO: Should this be here, or should it be up to us whether or not
+		// to show the dialog.
 		showLocationDialog(activity);
 		return null;
 	}

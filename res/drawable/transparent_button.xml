@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:state_pressed="true"
-        android:drawable="@drawable/transparent_button_pressed"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- When pressed, show a nice shaded blue button -->
+    <item android:drawable="@drawable/transparent_button_pressed" 
+        android:state_pressed="true"/>
+
+    <!-- When unpressed, background is transparent -->
     <item android:drawable="@drawable/transparent_background"/>
 
 </selector>

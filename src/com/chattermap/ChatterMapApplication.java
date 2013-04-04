@@ -12,15 +12,14 @@ public class ChatterMapApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 
-		// Add your initialization code here
+		// Initialize the Parse Database
 		Parse.initialize(this, "FvOIF7bVKcoDUiIoX6dscqrQymIR9GkNlP1tAdNn",
 				"aa9Bmep28gPbqjYk2bd9OUaI6pqvSW0W243QOu9E");
 
 		ParseUser.enableAutomaticUser();
 		ParseACL defaultACL = new ParseACL();
 
-		// If you would like all objects to be private by default, remove this
-		// line.
+		// Allow public viewing of the database, so all users have access
 		defaultACL.setPublicReadAccess(true);
 	}
 }

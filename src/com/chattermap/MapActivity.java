@@ -31,6 +31,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+/**
+ * Primary {@link Activity} of the application. Displays a Google Maps instance
+ * with notes for the users viewing pleasure. Also allows the addition of new
+ * notes through a long press or menu action.
+ */
 public class MapActivity extends Activity implements OnMapLongClickListener,
 		LocationListener, EditNoteDialog.EditNoteDialogListener {
 	ChatGroup mCurrentGroup;
@@ -40,13 +45,16 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.screen_maplayout);
+
+		// Setup the map instance
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
 		setupDB();
+
+		// By default, load the Public group to the map
 		loadPublicGroup(true);
 	}
 
@@ -57,6 +65,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		// Attempt to retrieve the current location
 		setCurrentLocation(LocationUtils.getCurrentLocation(this, this));
 		if (getCurrentLocation() != null) {
+			// Set the map to look at it
 			setMapTarget(getCurrentLocation());
 		}
 	}
@@ -71,11 +80,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	private void addNoteToMap(Note note) {
 		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
 				.getLocation().getLongitude());
-		Log.i("MAPNOTE",
-				"Title: \"" + note.getTitle() + "\" Body:\"" + note.getBody()
-						+ "\" at (" + String.valueOf(loc.latitude) + ","
-						+ String.valueOf(loc.longitude) + ")");
-		// if the note doesn't have a title, use the body as the info window
+
+		// If the note doesn't have a title, use the body as the info window
 		// title
 		if (note.getTitle().length() == 0) {
 			mMap.addMarker(new MarkerOptions().position(loc).title(
@@ -86,16 +92,20 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		}
 	}
 
-	// TODO: uncalled method, does this need to exist?
-	private void saveNote(final String title, final String body,
-			final double lat, final double longit) {
-		Note.create(title, body, lat, longit, mCurrentGroup);
-	}
-
+	/**
+	 * Retrieves the current group being viewed by the user.
+	 * 
+	 * @return {@link ChatGroup} currently being viewed
+	 */
 	public ChatGroup getCurrentGroup() {
 		return mCurrentGroup;
 	}
 
+	/**
+	 * Connects to the Parse Cloud to retrieve notes from the Public group and
+	 * add them to the users local database. Starts a new AsyncTask to do
+	 * network I/O asynchronously.
+	 */
 	private void loadPublicGroup(boolean b) {
 		final ProgressDialog pd = ProgressDialog.show(MapActivity.this,
 				"Loading...", "Working");
@@ -129,12 +139,17 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 	}
 
-	// Called when ready to display notes
+	/**
+	 * Retrieves all locally saved notes for the current group and populates the
+	 * map with them.
+	 */
 	private void displayNotes() {
 		List<Note> notes = mCurrentGroup.getNotes(getApplicationContext())
 				.toList();
 		Log.i("GROUP", "Displaying group: \"" + mCurrentGroup.getName()
 				+ "\" with " + String.valueOf(notes.size()) + " notes");
+
+		// Clear the map so we don't get duplicates or have leftover notes
 		mMap.clear();
 		for (Note note : notes) {
 			addNoteToMap(note);
@@ -193,6 +208,15 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				lad.show();
 			}
 			return true;
+		case R.id.menu_refresh:
+			// Attempt to refresh map
+			if (mCurrentGroup != null) {
+				try {
+					update(mCurrentGroup);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return false;
 	}
@@ -248,12 +272,12 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	}
 
 	/**
-	 * Save notes to a group
+	 * Saves notes from the Parse Cloud to the local database.
 	 * 
 	 * @param notes
-	 *            list of notes
+	 *            List of notes received from the Parse Cloud
 	 * @param group
-	 *            that the notes belong to
+	 *            {@link ChatGroup} that the notes belong to
 	 */
 	private void saveNotes(List<ParseObject> notes, ChatGroup group) {
 
@@ -279,7 +303,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	}
 
 	/**
-	 * Sets up the background database for Groups and Notes
+	 * Sets up the local background database for Groups and Notes
 	 */
 	private void setupDB() {
 		DatabaseAdapter.setDatabaseName("chattermapdb");
@@ -293,9 +317,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 	@Override
 	public void onMapLongClick(LatLng loc) {
-		// TODO: Use the stored activity to launch the "choose action" dialog
-		Log.d("LONG PRESS", "Long press at: (" + loc.latitude + ", "
-				+ loc.longitude + ")");
+		// Launch a LocationActionDialog to do for this location
 		LocationActionDialog lad = new LocationActionDialog(this,
 				mCurrentGroup, loc.latitude, loc.longitude);
 		lad.show();
@@ -314,6 +336,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		}
 	}
 
+	// Required extra unused methods from LocationListener
 	@Override
 	public void onProviderDisabled(String provider) {
 	}
@@ -369,12 +392,13 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 	@Override
 	public void onFinishEditDialog(int result) {
+		// Called when the EditNoteDialog is finished
 		switch (result) {
 		case RESULT_OK:
 			try {
+				// On an "OK", a note was added, update the map
 				update(mCurrentGroup);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;

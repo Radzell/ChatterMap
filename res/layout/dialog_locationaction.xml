@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <!-- Share note button -->
 	<Button 
 	    android:id="@+id/dialog_sharenote"
 	    android:layout_width="match_parent"
@@ -17,11 +18,13 @@
 	    android:textSize="20sp"
 	    android:background="@drawable/transparent_button"/>
 	
+	<!-- Blue Separator Line -->
 	<ImageView
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:src="@drawable/solid_holo_blue" />
 	
+	<!-- Add to favorite locations button -->
 	<Button 
 	    android:id="@+id/dialog_addfavorite"
 	    android:layout_width="match_parent"

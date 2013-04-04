@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dip" >
-    
+
     <!-- Title separator -->
-	<TextView
-		android:id="@+id/dialog_editnote_notetitle"
+
+    <TextView
+        android:id="@+id/dialog_editnote_notetitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,22 +23,24 @@
         android:layout_height="1dip"
         android:layout_below="@id/dialog_editnote_notetitle"
         android:src="@drawable/solid_holo_blue" />
-    
+
     <!-- Title EditText -->
-   	<EditText
-   	    android:id="@+id/dialog_editnote_edittitle"
-   	    android:layout_width="match_parent"
-   	    android:layout_height="wrap_content"
-   	    android:hint="@string/editnote_edittitle"
-   	    android:minLines="1"
-   	    android:maxLines="1"
-   	    android:lines="1"
-   	    android:gravity="top|left"
-   	    android:layout_below="@id/title_separator"/>
-   	    
-   	<!-- Body separator -->
-	<TextView
-		android:id="@+id/dialog_editnote_notebody"
+
+    <EditText
+        android:id="@+id/dialog_editnote_edittitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_separator"
+        android:gravity="top|left"
+        android:hint="@string/editnote_edittitle"
+        android:lines="1"
+        android:maxLines="1"
+        android:minLines="1" />
+
+    <!-- Body separator -->
+
+    <TextView
+        android:id="@+id/dialog_editnote_notebody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dialog_editnote_edittitle"
@@ -53,19 +56,20 @@
         android:layout_height="1dip"
         android:layout_below="@id/dialog_editnote_notebody"
         android:src="@drawable/solid_holo_blue" />
-    
+
     <!-- Body EditText -->
-    <EditText 
+
+    <EditText
         android:id="@+id/dialog_editnote_editbody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/editnote_editbody"
-        android:minLines="6"
-        android:maxLines="10"
-        android:scrollbars="vertical"
-        android:gravity="top|left"
-        android:layout_below="@id/body_separator"
         android:layout_alignParentBottom="true"
-        android:inputType="textMultiLine"/>
+        android:layout_below="@id/body_separator"
+        android:gravity="top|left"
+        android:hint="@string/editnote_editbody"
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minLines="6"
+        android:scrollbars="vertical" />
 
 </RelativeLayout>

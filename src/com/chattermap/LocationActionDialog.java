@@ -4,16 +4,17 @@ import com.chattermap.entity.ChatGroup;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * Dialog to ask a user what action they would like to perform at a particular
+ * location, either share a note or add the location to their favorites.
+ */
 public class LocationActionDialog extends Dialog {
 	private double mLat, mLong;
 	private final Activity mContext;
@@ -54,6 +55,8 @@ public class LocationActionDialog extends Dialog {
 			public void onClick(View v) {
 				// Start the edit note dialog
 				EditNoteDialog editdialog = new EditNoteDialog();
+				
+				// Pass along latitude and longitude of the click
 				Bundle args = new Bundle();
 				args.putDouble(mContext.getString(R.string.editnote_latitude),
 						mLat);
@@ -61,9 +64,8 @@ public class LocationActionDialog extends Dialog {
 						mLong);
 				editdialog.setArguments(args);
 
-				Activity act = getOwnerActivity();
-				FragmentManager fm = act.getFragmentManager();
-				editdialog.show(fm, "editnote");
+				editdialog.show(getOwnerActivity().getFragmentManager(),
+						"editnote");
 				LocationActionDialog.this.dismiss();
 			}
 		});

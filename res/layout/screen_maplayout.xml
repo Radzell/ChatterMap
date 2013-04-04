@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity" >
 
+    <!-- Include the map fragment with our custom options -->
     <include
         android:id="@+id/map"
         android:layout_width="match_parent"
