@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dip" >
+    
+    <!-- Title separator -->
+	<TextView
+		android:id="@+id/dialog_editnote_notetitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="20dip"
+        android:text="@string/editnote_notetitle"
+        android:textColor="#FF33B5E5"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/title_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/dialog_editnote_notetitle"
+        android:src="@drawable/solid_holo_blue" />
+    
+    <!-- Title EditText -->
+   	<EditText
+   	    android:id="@+id/dialog_editnote_edittitle"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:hint="@string/editnote_edittitle"
+   	    android:minLines="1"
+   	    android:maxLines="1"
+   	    android:lines="1"
+   	    android:gravity="top|left"
+   	    android:layout_below="@id/title_separator"/>
+   	    
+   	<!-- Body separator -->
+	<TextView
+		android:id="@+id/dialog_editnote_notebody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_editnote_edittitle"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="20dip"
+        android:text="@string/editnote_notebody"
+        android:textColor="#FF33B5E5"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/body_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/dialog_editnote_notebody"
+        android:src="@drawable/solid_holo_blue" />
+    
+    <!-- Body EditText -->
+    <EditText 
+        android:id="@+id/dialog_editnote_editbody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/editnote_editbody"
+        android:minLines="6"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:gravity="top|left"
+        android:layout_below="@id/body_separator"
+        android:layout_alignParentBottom="true"
+        android:inputType="textMultiLine"/>
+
+</RelativeLayout>

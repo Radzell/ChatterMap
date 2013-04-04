@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
@@ -33,7 +32,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class MapActivity extends Activity implements OnMapLongClickListener,
-		LocationListener {
+		LocationListener, EditNoteDialog.EditNoteDialogListener {
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
@@ -76,12 +75,25 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				"Title: \"" + note.getTitle() + "\" Body:\"" + note.getBody()
 						+ "\" at (" + String.valueOf(loc.latitude) + ","
 						+ String.valueOf(loc.longitude) + ")");
-		mMap.addMarker(new MarkerOptions().position(loc).title(note.getBody()));
+		// if the note doesn't have a title, use the body as the info window
+		// title
+		if (note.getTitle().length() == 0) {
+			mMap.addMarker(new MarkerOptions().position(loc).title(
+					note.getBody()));
+		} else {
+			mMap.addMarker(new MarkerOptions().position(loc)
+					.title(note.getTitle()).snippet(note.getBody()));
+		}
 	}
 
+	// TODO: uncalled method, does this need to exist?
 	private void saveNote(final String title, final String body,
 			final double lat, final double longit) {
 		Note.create(title, body, lat, longit, mCurrentGroup);
+	}
+
+	public ChatGroup getCurrentGroup() {
+		return mCurrentGroup;
 	}
 
 	private void loadPublicGroup(boolean b) {
@@ -208,7 +220,6 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 					}
 				}
 			});
-
 		}
 	}
 
@@ -265,25 +276,6 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				Log.i("Test", "not empty");
 			}
 		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (resultCode) {
-		case RESULT_OK:
-			try {
-				update(mCurrentGroup);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
-			break;
-		case RESULT_CANCELED:
-			// Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
@@ -373,5 +365,19 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 */
 	public void setCurrentLocation(Location loc) {
 		mCurrentLocation = loc;
+	}
+
+	@Override
+	public void onFinishEditDialog(int result) {
+		switch (result) {
+		case RESULT_OK:
+			try {
+				update(mCurrentGroup);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
 	}
 }

@@ -20,9 +20,12 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <string name="menu_settings">Settings</string>
     
     <!--  Edit Note Screen Strings -->
-    <string name="editnote_share">Share With : </string>
-    <string name="editnote_edit">Edit note text &#8230;</string>
+    <string name="editnote_notetitle">Title</string>
+    <string name="editnote_edittitle">Add this note\'s title &#8230;</string>
+    <string name="editnote_notebody">Body</string>
+    <string name="editnote_editbody">Edit note text &#8230;</string>
     <string name="editnote_submit">Submit Note</string>
+    <string name="editnote_cancel">Cancel</string>
     <string name="editnote_attach">Attach an Image</string>
 	<string name="editnote_latitude">latitude</string>
     <string name="editnote_longitude">longitude</string>

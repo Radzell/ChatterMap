@@ -41,7 +41,7 @@
         </activity>
         
         <activity 
-            android:name="com.chattermap.EditNoteActivity"
+            android:name="com.chattermap.EditNoteDialog"
             android:label="@string/edit_note" />
         
         <meta-data

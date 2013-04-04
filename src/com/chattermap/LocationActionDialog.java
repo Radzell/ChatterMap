@@ -4,9 +4,11 @@ import com.chattermap.entity.ChatGroup;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -42,6 +44,7 @@ public class LocationActionDialog extends Dialog {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.dialog_locationaction);
 
+		setOwnerActivity((Activity) context);
 		// TODO: Change text if current location or "other" location
 		// Add listeners to the buttons
 		Button shareButton = (Button) this.findViewById(R.id.dialog_sharenote);
@@ -49,18 +52,18 @@ public class LocationActionDialog extends Dialog {
 		shareButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Start the edit note activity
-				Intent editIntent = new Intent(mContext, EditNoteActivity.class);
-				editIntent.putExtra(
-						mContext.getString(R.string.editnote_latitude), mLat);
-				editIntent.putExtra(
-						mContext.getString(R.string.editnote_longitude), mLong);
-				editIntent.putExtra(mContext.getString(R.string.editnote_id),
-						"empty");
-				editIntent.putExtra("groupid", group.getObjectID());
+				// Start the edit note dialog
+				EditNoteDialog editdialog = new EditNoteDialog();
+				Bundle args = new Bundle();
+				args.putDouble(mContext.getString(R.string.editnote_latitude),
+						mLat);
+				args.putDouble(mContext.getString(R.string.editnote_longitude),
+						mLong);
+				editdialog.setArguments(args);
 
-				mContext.startActivityForResult(editIntent, 0);
-
+				Activity act = getOwnerActivity();
+				FragmentManager fm = act.getFragmentManager();
+				editdialog.show(fm, "editnote");
 				LocationActionDialog.this.dismiss();
 			}
 		});
@@ -75,22 +78,5 @@ public class LocationActionDialog extends Dialog {
 				LocationActionDialog.this.dismiss();
 			}
 		});
-		new AsyncTask<Void, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			protected void onPreExecute() {
-			};
-
-			@Override
-			protected void onPostExecute(Void result) {
-			};
-
-		}.execute();
 	}
 }
