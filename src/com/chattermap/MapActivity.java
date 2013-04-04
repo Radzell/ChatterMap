@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
@@ -59,8 +60,22 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		}
 	}
 
-	private void saveNote(final String title, final String body, final int lat,
-			final int longit) {
+	/**
+	 * Adds a give note to the map with associated marker and InfoWindow
+	 * contents.
+	 * 
+	 * @param note
+	 *            {@link Note} object to add to the map
+	 */
+	private void addNoteToMap(Note note) {
+		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
+				.getLocation().getLongitude());
+		mMap.addMarker(new MarkerOptions().position(loc).title(note.getTitle())
+				.snippet(note.getBody()));
+	}
+
+	private void saveNote(final String title, final String body,
+			final double lat, final double longit) {
 		Note.create(title, body, lat, longit, mCurrentGroup);
 	}
 
@@ -73,6 +88,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			protected Void doInBackground(Void... params) {
 				try {
 					loadPublicGroup();
+					update(mCurrentGroup);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -82,7 +98,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 			@Override
 			protected void onPostExecute(Void result) {
-				saveNote("Second Note title", "This is our second Note", 0, 0);
+				saveNote("Second Note title", "This is our second Note", 0.0d,
+						0.0d);
 				pd.dismiss();
 			};
 
@@ -136,9 +153,9 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			} else {
 				// open a dialog for an action to perform at current location
 				LocationActionDialog lad = new LocationActionDialog(
-						MapActivity.this, mCurrentGroup,
-						getCurrentLocation().getLatitude(),
-						getCurrentLocation().getLongitude());
+						MapActivity.this, mCurrentGroup, getCurrentLocation()
+								.getLatitude(), getCurrentLocation()
+								.getLongitude());
 				lad.show();
 			}
 			return true;
@@ -181,7 +198,12 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				}
 			}
 		});
-
+		List<Note> notes = mCurrentGroup.getNotes(getApplicationContext())
+				.all().toList();
+		Log.d("NOTES", String.valueOf(notes.size()));
+		for (Note n : notes) {
+			Log.d("NOTES", n.getBody());
+		}
 	}
 
 	/**

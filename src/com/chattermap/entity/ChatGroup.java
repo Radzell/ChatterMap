@@ -28,6 +28,10 @@ public class ChatGroup extends Model {
 	public String getName() {
 		return mName.get();
 	}
+	
+	public QuerySet<Note> getNotes(Context context) {
+		return mNotes.get(context,  this);
+	}
 
 	public void setName(String mName) {
 		this.mName.set(mName);

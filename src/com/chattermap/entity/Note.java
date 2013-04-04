@@ -41,6 +41,10 @@ public class Note extends Model {
 	public void setTitle(String mTitle) {
 		this.mTitle.set(mTitle);
 	}
+	
+	public String getBody() {
+		return mBody.get();
+	}
 
 	public Location getLocation() {
 		return mLocation.get();
