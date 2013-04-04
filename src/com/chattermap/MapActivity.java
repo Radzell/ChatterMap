@@ -20,11 +20,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Filter;
 import com.orm.androrm.Model;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -83,10 +83,17 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 
 	}
 
-	// Called when ready to display
+	// Called when ready to display notes
 	private void displayNotes() {
 		Log.i("Test", "displaying group");
-
+		List<Note> notes = mCurrentGroup.getNotes(this).all().toList();
+		for (Note note : notes) {
+			LatLng latlng = new LatLng(note.getLocation().getLatitude(), note
+					.getLocation().getLongitude());
+			MarkerOptions startMarker = new MarkerOptions().position(latlng)
+					.title("Start");
+			mMap.addMarker(startMarker);
+		}
 	}
 
 	/**
@@ -220,7 +227,10 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 				note.setGroup(group);
 				note.setTitle(po.getString("mTitle"));
 				note.setBody(po.getString("mBody"));
-
+				Location lo = new Location("GPS");
+				lo.setLatitude(po.getDouble("mLat"));
+				lo.setLatitude(po.getDouble("mLongit"));
+				note.setLocation(lo);
 				note.save(MapActivity.this);
 			} else {
 				Log.i("Test", "not empty");
@@ -232,10 +242,16 @@ public class MapActivity extends Activity implements OnMapLongClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case RESULT_OK:
-			Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
+			try {
+				update(mCurrentGroup);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
 			break;
 		case RESULT_CANCELED:
-			Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
