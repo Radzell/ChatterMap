@@ -16,8 +16,8 @@ public class GroupListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// Set the layout and initialize:
-		setContentView(R.layout.screen_list);
-		ListView lv = (ListView) findViewById(R.id.screen_mainlist);
+		setContentView(R.layout.dialog_list);
+		ListView lv = (ListView) findViewById(R.id.listdialog_list);
 
 		// TODO: Populate list with groups the user is a member of
 	}

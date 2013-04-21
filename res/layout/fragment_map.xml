@@ -4,7 +4,7 @@
     android:id="@+id/map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    class="com.google.android.gms.maps.MapFragment"
+    class="pl.mg6.android.maps.extensions.SupportMapFragment"
     map:uiRotateGestures="false" 
     map:uiCompass="false"
     map:uiZoomControls="false"/>

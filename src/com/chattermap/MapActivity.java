@@ -9,18 +9,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
+import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
+
 import com.chattermap.entity.ChatGroup;
 import com.chattermap.entity.Note;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,8 +42,9 @@ import com.parse.ParseQuery;
  * with notes for the users viewing pleasure. Also allows the addition of new
  * notes through a long press or menu action.
  */
-public class MapActivity extends Activity implements OnMapLongClickListener,
-		LocationListener, EditNoteDialog.EditNoteDialogListener {
+public class MapActivity extends FragmentActivity implements
+		OnMapLongClickListener, LocationListener,
+		EditNoteDialog.EditNoteDialogListener {
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
@@ -49,11 +55,24 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		setContentView(R.layout.screen_maplayout);
 
 		// Setup the map instance
-		// TODO: Graceful exit if map is null (i.e. user doesn't have PlayServices
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		// TODO: Graceful exit if map is null (i.e. user doesn't have
+		// PlayServices
+		mMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.map)).getExtendedMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
+		mMap.setClustering(new ClusteringSettings().iconDataProvider(
+				new NoteIconProvider(getResources())).addMarkersDynamically(
+				true));
+		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				MarkerActionDialog mad = new MarkerActionDialog(
+						MapActivity.this, marker);
+				mad.show();
+				return true;
+			}
+		});
 		setupDB();
 
 		// By default, load the Public group to the map
@@ -80,24 +99,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            {@link Note} object to add to the map
 	 */
 	private void addNoteToMap(Note note) {
-		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
-				.getLocation().getLongitude());
-
-		// If the note doesn't have a title, use the body as the info window
-		// title
-		if (note.getTitle().length() == 0) {
-			mMap.addMarker(new MarkerOptions().position(loc)
-					.icon(BitmapDescriptorFactory.fromBitmap(NoteMarkerFactory.createNoteMarker(1, 100, getApplicationContext())))
-					.anchor(0.5f,  1.0f));
-			/*mMap.addMarker(new MarkerOptions().position(loc).title(
-					note.getBody()));*/
-		} else {
-			mMap.addMarker(new MarkerOptions().position(loc)
-					.icon(BitmapDescriptorFactory.fromBitmap(NoteMarkerFactory.createNoteMarker(1, 100, getApplicationContext())))
-					.anchor(0.5f,  1.0f));
-					/*.title(note.getTitle())
-					.snippet(note.getBody()));*/
-		}
+		mMap.addMarker(NoteIconProvider.fromNote(note, this));
 	}
 
 	/**
