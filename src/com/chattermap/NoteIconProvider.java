@@ -19,10 +19,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class NoteIconProvider implements IconDataProvider {
-	private static final int[] res = { R.drawable.l1, R.drawable.l2,
-			R.drawable.l3, R.drawable.l4, R.drawable.l5 };
+	private static final int[] res = { R.drawable.l1, R.drawable.l1b,
+			R.drawable.l2, R.drawable.l2b, R.drawable.l3, R.drawable.l3b,
+			R.drawable.l4, R.drawable.l4b, R.drawable.l5, R.drawable.l5b };
 
-	private static final int[] forCounts = { 10, 100, 1000, 10000,
+	private static final int[] forCounts = { 2, 5, 10, 25, 50, 75, 100, 250, 1000,
 			Integer.MAX_VALUE };
 
 	private Bitmap[] baseBitmaps;
@@ -95,21 +96,51 @@ public class NoteIconProvider implements IconDataProvider {
 
 		// Create a bitmap with the given size to draw into
 		Bitmap baseIcon = BitmapFactory.decodeResource(context.getResources(),
-				(R.drawable.l1));
-		int size = baseIcon.getWidth();
-		Bitmap bmp = Bitmap.createBitmap(size, size, conf);
+				(R.drawable.notecallout));
+		int width = baseIcon.getWidth();
+		int height = baseIcon.getHeight();
+		Bitmap bmp = Bitmap.createBitmap(width, height, conf);
 
 		// Create a canvas to draw into the Bitmap with
 		Canvas c = new Canvas(bmp);
 
 		// Draw the callout and note count
-		Paint color = new Paint();
-		color.setTextSize(((float) size) / 5.0f);
-		color.setTextAlign(Align.CENTER);
-		color.setColor(Color.BLACK);
-		c.drawBitmap(BitmapFactory.decodeResource(context.getResources(),
-				(R.drawable.l1)), 0, 0, color);
-		c.drawText(String.valueOf(1), size / 2, 3 * size / 5, color);
+		Paint textPaint = new Paint();
+		int fontSize = context.getResources().getDimensionPixelSize(
+				R.dimen.markerFontSize);
+		textPaint.setTextSize(fontSize);
+		textPaint.setTextAlign(Align.CENTER);
+		textPaint.setColor(Color.BLACK);
+		c.drawBitmap(baseIcon, 0, 0, textPaint);
+
+		// Draw the text on the canvas
+		int lines = 0, index = 0;
+		
+		// Split the body of the note into words
+		String[] words = note.getBody().split(" ");
+		
+		// Make 3 lines of text 
+		while (lines < 3) {
+			
+			// Add as many words as will fit onto each line
+			String line = "";
+			while (index < words.length
+					&& textPaint.measureText(line + " " + words[index]) < width) {
+				line += " " + words[index];
+				++index;
+			}
+			
+			// If content didn't fit on the last line, add an ellipsis
+			++lines;
+			if (lines == 3 && index < words.length) {
+				if (line.length() > 3) {
+					line = line.substring(0, line.length() - 3) + "...";
+				} else {
+					line = "...";
+				}
+			}
+			c.drawText(line, width / 2, lines * fontSize, textPaint);
+		}
 
 		// Add the bitmap to the MarkerOptions, set the anchor point, and return
 		options.icon(BitmapDescriptorFactory.fromBitmap(bmp));
