@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.androrm.DatabaseAdapter;
@@ -48,6 +49,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		setContentView(R.layout.screen_maplayout);
 
 		// Setup the map instance
+		// TODO: Graceful exit if map is null (i.e. user doesn't have PlayServices
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
@@ -84,11 +86,17 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		// If the note doesn't have a title, use the body as the info window
 		// title
 		if (note.getTitle().length() == 0) {
-			mMap.addMarker(new MarkerOptions().position(loc).title(
-					note.getBody()));
+			mMap.addMarker(new MarkerOptions().position(loc)
+					.icon(BitmapDescriptorFactory.fromBitmap(NoteMarkerFactory.createNoteMarker(1, 100, getApplicationContext())))
+					.anchor(0.5f,  1.0f));
+			/*mMap.addMarker(new MarkerOptions().position(loc).title(
+					note.getBody()));*/
 		} else {
 			mMap.addMarker(new MarkerOptions().position(loc)
-					.title(note.getTitle()).snippet(note.getBody()));
+					.icon(BitmapDescriptorFactory.fromBitmap(NoteMarkerFactory.createNoteMarker(1, 100, getApplicationContext())))
+					.anchor(0.5f,  1.0f));
+					/*.title(note.getTitle())
+					.snippet(note.getBody()));*/
 		}
 	}
 
