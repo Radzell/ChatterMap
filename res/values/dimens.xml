@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Size of font on the marker callouts -->
+    <dimen name="markerFontSize">12sp</dimen>
+</resources>

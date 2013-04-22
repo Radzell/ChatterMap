@@ -18,10 +18,10 @@
     
     <!-- Settings Button  -->
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/menu_changeuser"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/menu_settings"/>
+        android:title="@string/menu_changeuser"/>
 	<!-- Settings Button  -->
     <item
         android:id="@+id/menu_changegroup"

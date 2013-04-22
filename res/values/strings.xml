@@ -15,8 +15,8 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <!-- Map Screen Strings -->
     <string name="menu_add">Add Note or Save Current Location</string>
     <string name="menu_refresh">Refresh Map</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_changegroup">Settings</string>
+    <string name="menu_changeuser">Change User</string>
+    <string name="menu_changegroup">Change Group</string>
     
     <!-- Edit Note Screen Strings -->
     <string name="editnote_notetitle">Title</string>
