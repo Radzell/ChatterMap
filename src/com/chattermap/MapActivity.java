@@ -9,21 +9,25 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
+import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
 
 import com.chattermap.entity.ChatGroup;
 import com.chattermap.entity.Note;
 import com.chattermap.entity.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Filter;
 import com.orm.androrm.Model;
@@ -37,8 +41,10 @@ import com.parse.ParseQuery;
  * with notes for the users viewing pleasure. Also allows the addition of new
  * notes through a long press or menu action.
  */
-public class MapActivity extends Activity implements OnMapLongClickListener,
-		LocationListener, EditNoteDialog.EditNoteDialogListener {
+public class MapActivity extends FragmentActivity implements
+		OnMapLongClickListener, LocationListener,
+		EditNoteDialog.EditNoteDialogListener,
+		MarkerActionDialog.MarkerDialogListener {
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
@@ -51,10 +57,25 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		setContentView(R.layout.screen_maplayout);
 
 		// Setup the map instance
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		// TODO: Graceful exit if map is null (i.e. user doesn't have
+		// PlayServices
+		mMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.map)).getExtendedMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.setOnMapLongClickListener(this);
+		mMap.setClustering(new ClusteringSettings().iconDataProvider(
+				new NoteIconProvider(getResources())).addMarkersDynamically(
+				true));
+		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				// Start a MarkerActionDialog for the clicked marker
+				MarkerActionDialog mad = new MarkerActionDialog(
+						MapActivity.this, marker, MapActivity.this);
+				mad.show();
+				return true;
+			}
+		});
 		setupDB();
 
 		// By default, load the Public group to the map
@@ -81,18 +102,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            {@link Note} object to add to the map
 	 */
 	private void addNoteToMap(Note note) {
-		LatLng loc = new LatLng(note.getLocation().getLatitude(), note
-				.getLocation().getLongitude());
-
-		// If the note doesn't have a title, use the body as the info window
-		// title
-		if (note.getTitle().length() == 0) {
-			mMap.addMarker(new MarkerOptions().position(loc).title(
-					note.getBody()));
-		} else {
-			mMap.addMarker(new MarkerOptions().position(loc)
-					.title(note.getTitle()).snippet(note.getBody()));
-		}
+		mMap.addMarker(NoteIconProvider.fromNote(note, this));
 	}
 
 	/**
@@ -235,7 +245,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 				}
 			}
 			return true;
-		case R.id.menu_settings:
+		case R.id.menu_changeuser:
 			LoginDialog log = new LoginDialog();
 			log.show(getFragmentManager(), "Test");
 			return true;
@@ -401,6 +411,17 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 *            {@link Location} to set the camera's position to
 	 */
 	private void setMapTarget(Location loc) {
+		setMapTarget(new LatLng(loc.getLatitude(), loc.getLongitude()));
+	}
+
+	/**
+	 * Sets the maps camera to focus on the given location. Also sets the zoom
+	 * level to an appropriate zoomed in state if a zoom hasn't yet been set.
+	 * 
+	 * @param loc
+	 *            {@link LatLng} to set the camera's position to
+	 */
+	private void setMapTarget(LatLng location) {
 		if (mMap != null) {
 			float zoom = mMap.getCameraPosition().zoom;
 
@@ -408,8 +429,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			// TODO: Zoom 17 was chosen because that's the first zoom level at
 			// which buildings can be seen, should this be different?
 			zoom = zoom < 17.0f ? 17.0f : zoom;
-			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(new LatLng(
-					loc.getLatitude(), loc.getLongitude()), zoom);
+			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(location,
+					zoom);
 			mMap.moveCamera(npos);
 		}
 	}
@@ -451,6 +472,16 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 
 	public void updateMenu() {
 		invalidateOptionsMenu();
-		
+
+	}
+
+	@Override
+	public void onFinishMarkerDialog(Marker m) {
+		if (m == null) {
+			return;
+		}
+
+		// If a valid Marker was clicked, center the map on it
+		this.setMapTarget(m.getPosition());
 	}
 }
