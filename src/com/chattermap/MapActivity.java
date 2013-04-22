@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.chattermap.entity.ChatGroup;
 import com.chattermap.entity.Note;
+import com.chattermap.entity.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +42,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
+
+	public User mCurrentUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +118,8 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			protected Void doInBackground(Void... params) {
 				try {
 					loadPublicGroup();
-					update(mCurrentGroup);
+					update();
+
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -126,7 +130,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			@Override
 			protected void onPostExecute(Void result) {
 				try {
-					update(mCurrentGroup);
+					update();
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -143,7 +147,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 * Retrieves all locally saved notes for the current group and populates the
 	 * map with them.
 	 */
-	private void displayNotes() {
+	public void displayNotes() {
 		List<Note> notes = mCurrentGroup.getNotes(getApplicationContext())
 				.toList();
 		Log.i("GROUP", "Displaying group: \"" + mCurrentGroup.getName()
@@ -185,6 +189,19 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_maplayout, menu);
+
+		String user = "";
+		String group = "";
+		if (mCurrentGroup != null)
+			group = mCurrentGroup.getName();
+		if (mCurrentUser != null) {
+			user = mCurrentUser.mEmail;
+		} else {
+			user = "Guest";
+		}
+		menu.add("User: " + user);
+		menu.add("Group: " + group);
+
 		return true;
 	}
 
@@ -212,11 +229,21 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			// Attempt to refresh map
 			if (mCurrentGroup != null) {
 				try {
-					update(mCurrentGroup);
+					update();
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
+			return true;
+		case R.id.menu_settings:
+			LoginDialog log = new LoginDialog();
+			log.show(getFragmentManager(), "Test");
+			return true;
+		case R.id.menu_changegroup:
+			ChatGroupDialog chatdialog = new ChatGroupDialog();
+			chatdialog.show(getFragmentManager(), "Test");
+			Toast.makeText(this, "Change Group", Toast.LENGTH_SHORT).show();
+			return true;
 		}
 		return false;
 	}
@@ -228,22 +255,38 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 	 */
 	public void update() throws ParseException {
 		// Getting the group from the database
-		List<ChatGroup> groups = ChatGroup.getGroups(this).all().toList();
+		final ParseQuery groupquery = new ParseQuery("Group");
+		groupquery.findInBackground(new FindCallback() {
 
-		for (final ChatGroup group : groups) {
-			// Find all notes by the current group
-			final ParseQuery query = new ParseQuery("Note");
-			query.whereEqualTo("parent", group.getObjectID());
-			query.findInBackground(new FindCallback() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
 
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					if (e == null) {
-						List<ParseObject> notes = objects;
-						saveNotes(notes, group);
-					}
+				if (e == null) {
+					List<ParseObject> groups = objects;
+					for (ParseObject po : groups)
+						saveGroup(po);
 				}
-			});
+
+			}
+		});
+	}
+
+	private void saveGroup(ParseObject group) {
+		if (ChatGroup.getGroups(this)
+				.filter(new Filter().is("mObjectID", group.getObjectId()))
+				.isEmpty()) {
+			ChatGroup g = new ChatGroup();
+			g.setName(group.getString("Name"));
+			g.setDescription(group.getString("Description"));
+			g.setUser(group.getString("User"));
+			g.setObjectID(group.getObjectId());
+			g.save(this);
+			try {
+				update(g);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -311,6 +354,7 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 		List<Class<? extends Model>> models = new ArrayList<Class<? extends Model>>();
 		models.add(ChatGroup.class);
 		models.add(Note.class);
+
 		DatabaseAdapter adapter = DatabaseAdapter.getInstance(this);
 		adapter.setModels(models);
 	}
@@ -403,5 +447,10 @@ public class MapActivity extends Activity implements OnMapLongClickListener,
 			}
 			break;
 		}
+	}
+
+	public void updateMenu() {
+		invalidateOptionsMenu();
+		
 	}
 }

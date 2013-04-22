@@ -16,7 +16,8 @@ Don\'t worry!  Your account will only be used internally to keep track of which 
     <string name="menu_add">Add Note or Save Current Location</string>
     <string name="menu_refresh">Refresh Map</string>
     <string name="menu_settings">Settings</string>
-
+    <string name="menu_changegroup">Settings</string>
+    
     <!-- Edit Note Screen Strings -->
     <string name="editnote_notetitle">Title</string>
     <string name="editnote_edittitle">Add this note\'s title &#8230;</string>

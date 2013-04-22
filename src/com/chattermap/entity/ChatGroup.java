@@ -9,6 +9,8 @@ import com.orm.androrm.Model;
 import com.orm.androrm.QuerySet;
 import com.orm.androrm.field.CharField;
 import com.orm.androrm.field.OneToManyField;
+import com.orm.androrm.migration.Migrator;
+import com.parse.ParseObject;
 
 /**
  * Group class that will be used to save to local disk TODO write update method
@@ -22,15 +24,19 @@ public class ChatGroup extends Model {
 	protected CharField mObjectID;
 	protected CharField mName;
 	protected CharField mDescription;
-
+	protected CharField mUser;
 	protected OneToManyField<ChatGroup, Note> mNotes;
+
+	public void setUser(String string) {
+		mUser.set(string);
+	}
 
 	public String getName() {
 		return mName.get();
 	}
-	
+
 	public QuerySet<Note> getNotes(Context context) {
-		return mNotes.get(context,  this);
+		return mNotes.get(context, this);
 	}
 
 	public void setName(String mName) {
@@ -51,9 +57,20 @@ public class ChatGroup extends Model {
 		mObjectID = new CharField();
 		mName = new CharField();
 		mDescription = new CharField();
-
+		mUser = new CharField();
 		mNotes = new OneToManyField<ChatGroup, Note>(ChatGroup.class,
 				Note.class);
+	}
+
+	public static void createChatGroup(String name, String description,
+			String user) {
+		ParseObject poGroup = new ParseObject("Group");
+
+		poGroup.put("Name", name);
+		poGroup.put("Description", description);
+		poGroup.put("User", user);
+		poGroup.saveEventually();
+
 	}
 
 	public static QuerySet<ChatGroup> getGroups(Context context) {
@@ -88,4 +105,14 @@ public class ChatGroup extends Model {
 		return mDescription.get();
 	}
 
+	@Override
+	protected void migrate(Context context) {
+		Migrator<ChatGroup> migrator = new Migrator<ChatGroup>(ChatGroup.class);
+
+		// tell the name of the field an the type
+		migrator.addField("mUser", new CharField());
+
+		// roll out all migrations
+		migrator.migrate(context);
+	}
 }
