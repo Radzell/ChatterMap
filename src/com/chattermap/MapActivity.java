@@ -42,7 +42,8 @@ import com.parse.ParseQuery;
  */
 public class MapActivity extends FragmentActivity implements
 		OnMapLongClickListener, LocationListener,
-		EditNoteDialog.EditNoteDialogListener {
+		EditNoteDialog.EditNoteDialogListener,
+		MarkerActionDialog.MarkerDialogListener {
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
@@ -66,7 +67,7 @@ public class MapActivity extends FragmentActivity implements
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				MarkerActionDialog mad = new MarkerActionDialog(
-						MapActivity.this, marker);
+						MapActivity.this, marker, MapActivity.this);
 				mad.show();
 				return true;
 			}
@@ -365,6 +366,10 @@ public class MapActivity extends FragmentActivity implements
 	 *            {@link Location} to set the camera's position to
 	 */
 	private void setMapTarget(Location loc) {
+		setMapTarget(new LatLng(loc.getLatitude(), loc.getLongitude()));
+	}
+
+	private void setMapTarget(LatLng location) {
 		if (mMap != null) {
 			float zoom = mMap.getCameraPosition().zoom;
 
@@ -372,8 +377,8 @@ public class MapActivity extends FragmentActivity implements
 			// TODO: Zoom 17 was chosen because that's the first zoom level at
 			// which buildings can be seen, should this be different?
 			zoom = zoom < 17.0f ? 17.0f : zoom;
-			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(new LatLng(
-					loc.getLatitude(), loc.getLongitude()), zoom);
+			CameraUpdate npos = CameraUpdateFactory.newLatLngZoom(location,
+					zoom);
 			mMap.moveCamera(npos);
 		}
 	}
@@ -411,5 +416,12 @@ public class MapActivity extends FragmentActivity implements
 			}
 			break;
 		}
+	}
+
+	@Override
+	public void onFinishMarkerDialog(Marker m) {
+		if (m == null)
+			return;
+		this.setMapTarget(m.getPosition());
 	}
 }
