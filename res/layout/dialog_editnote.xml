@@ -15,7 +15,7 @@
         android:paddingTop="20dip"
         android:text="@string/editnote_notetitle"
         android:textColor="#FF33B5E5"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/title_separator"
@@ -48,7 +48,7 @@
         android:paddingTop="20dip"
         android:text="@string/editnote_notebody"
         android:textColor="#FF33B5E5"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/body_separator"
