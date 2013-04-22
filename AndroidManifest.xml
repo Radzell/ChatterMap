@@ -23,6 +23,7 @@
 	<uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 	
     <application
         android:name="ChatterMapApplication"
