@@ -66,6 +66,7 @@ public class MapActivity extends FragmentActivity implements
 		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker) {
+				// Start a MarkerActionDialog for the clicked marker
 				MarkerActionDialog mad = new MarkerActionDialog(
 						MapActivity.this, marker, MapActivity.this);
 				mad.show();
@@ -369,6 +370,13 @@ public class MapActivity extends FragmentActivity implements
 		setMapTarget(new LatLng(loc.getLatitude(), loc.getLongitude()));
 	}
 
+	/**
+	 * Sets the maps camera to focus on the given location. Also sets the zoom
+	 * level to an appropriate zoomed in state if a zoom hasn't yet been set.
+	 * 
+	 * @param loc
+	 *            {@link LatLng} to set the camera's position to
+	 */
 	private void setMapTarget(LatLng location) {
 		if (mMap != null) {
 			float zoom = mMap.getCameraPosition().zoom;
@@ -420,8 +428,11 @@ public class MapActivity extends FragmentActivity implements
 
 	@Override
 	public void onFinishMarkerDialog(Marker m) {
-		if (m == null)
+		if (m == null) {
 			return;
+		}
+
+		// If a valid Marker was clicked, center the map on it
 		this.setMapTarget(m.getPosition());
 	}
 }

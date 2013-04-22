@@ -18,9 +18,9 @@ public class MarkerActionDialog extends Dialog {
 	public interface MarkerDialogListener {
 		void onFinishMarkerDialog(Marker m);
 	}
-	
+
 	private MarkerDialogListener mListener;
-	
+
 	/**
 	 * Creates a LocationActionDialog that asks the user if they want to share a
 	 * note at this location or add this location to list of favorites.
@@ -30,17 +30,21 @@ public class MarkerActionDialog extends Dialog {
 	 *            dialog
 	 * @param marker
 	 *            {@link Marker} that was clicked
+	 * @param mdl
+	 *            {@link MarkerDialogListener} that will listens for this Dialog
+	 *            to finish
 	 */
-	public MarkerActionDialog(Activity context, final Marker marker, MarkerDialogListener mdl) {
+	public MarkerActionDialog(Activity context, final Marker marker,
+			MarkerDialogListener mdl) {
 		super(context);
 		mListener = mdl;
-		
+
 		// Load the location action layout
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.dialog_list);
 
-		// If the marker is a clustered marker, populate the list, otherwise
-		// just display the note
+		// If the marker is a clustered marker, add all of it's children to the
+		// list, otherwise only add itself
 		Marker[] markerList;
 		if (marker.isCluster()) {
 			markerList = new Marker[marker.getMarkers().size()];
@@ -52,16 +56,20 @@ public class MarkerActionDialog extends Dialog {
 			markerList[0] = marker;
 		}
 
-		// Add these snippets to the list
+		// Add these markers to the list
 		final ListView lv = (ListView) this.findViewById(R.id.listdialog_list);
-		lv.setAdapter(new NoteAdapter(context,
-				R.layout.notelist_row, markerList));
+		lv.setAdapter(new NoteAdapter(context, R.layout.notelist_row,
+				markerList));
+
+		// If any note marker is clicked, exit the dialog and send it to the
+		// listener
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				// Update the listener with the clicked item, then exit
-				mListener.onFinishMarkerDialog(((NoteAdapter) lv.getAdapter()).getItem(position));
+				mListener.onFinishMarkerDialog(((NoteAdapter) lv.getAdapter())
+						.getItem(position));
 				MarkerActionDialog.this.dismiss();
 			}
 		});
