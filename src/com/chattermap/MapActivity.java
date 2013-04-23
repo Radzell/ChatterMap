@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationListener;
@@ -48,6 +49,7 @@ public class MapActivity extends FragmentActivity implements
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
+	private Dialog mCurrentDialog = null;
 
 	public User mCurrentUser;
 

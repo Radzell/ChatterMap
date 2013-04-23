@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 /**
@@ -62,7 +63,9 @@ public class EditNoteDialog extends DialogFragment {
 						onNegativeClick(dialog, id);
 					}
 				});
-		return builder.create();
+		Dialog d = builder.create();
+		d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		return d;
 	}
 
 	/**
