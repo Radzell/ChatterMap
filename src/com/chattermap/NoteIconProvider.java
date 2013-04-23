@@ -23,8 +23,8 @@ public class NoteIconProvider implements IconDataProvider {
 			R.drawable.l2, R.drawable.l2b, R.drawable.l3, R.drawable.l3b,
 			R.drawable.l4, R.drawable.l4b, R.drawable.l5, R.drawable.l5b };
 
-	private static final int[] forCounts = { 2, 5, 10, 25, 50, 75, 100, 250, 1000,
-			Integer.MAX_VALUE };
+	private static final int[] forCounts = { 2, 5, 10, 25, 50, 75, 100, 250,
+			1000, Integer.MAX_VALUE };
 
 	private Bitmap[] baseBitmaps;
 
@@ -35,6 +35,13 @@ public class NoteIconProvider implements IconDataProvider {
 	private MarkerOptions markerOptions = new MarkerOptions()
 			.anchor(0.5f, 1.0f);
 
+	/**
+	 * Constructor for the NoteIconProvider that initializes the basic paints
+	 * and bitmaps to use for the icons.
+	 * 
+	 * @param resources
+	 *            {@link Resources} for the provider to use to construct bitmaps
+	 */
 	public NoteIconProvider(Resources resources) {
 		// Retrieve the bitmaps for use with each level of clustering
 		baseBitmaps = new Bitmap[res.length];
@@ -115,13 +122,13 @@ public class NoteIconProvider implements IconDataProvider {
 
 		// Draw the text on the canvas
 		int lines = 0, index = 0;
-		
+
 		// Split the body of the note into words
 		String[] words = note.getBody().split(" ");
-		
-		// Make 3 lines of text 
+
+		// Make 3 lines of text
 		while (lines < 3) {
-			
+
 			// Add as many words as will fit onto each line
 			String line = "";
 			while (index < words.length
@@ -129,7 +136,7 @@ public class NoteIconProvider implements IconDataProvider {
 				line += " " + words[index];
 				++index;
 			}
-			
+
 			// If content didn't fit on the last line, add an ellipsis
 			++lines;
 			if (lines == 3 && index < words.length) {

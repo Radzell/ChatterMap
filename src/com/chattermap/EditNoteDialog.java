@@ -64,7 +64,10 @@ public class EditNoteDialog extends DialogFragment {
 					}
 				});
 		Dialog d = builder.create();
+		
+		// Resize the dialog if the keyboard is brought up
 		d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		
 		return d;
 	}
 
