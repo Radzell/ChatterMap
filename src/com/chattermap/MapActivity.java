@@ -27,6 +27,7 @@ import com.chattermap.entity.Note;
 import com.chattermap.entity.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.orm.androrm.DatabaseAdapter;
 import com.orm.androrm.Filter;
@@ -80,17 +81,58 @@ public class MapActivity extends FragmentActivity implements
 
 		// By default, load the Public group to the map
 		loadPublicGroup(true);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 
 		// Attempt to retrieve the current location
 		setCurrentLocation(LocationUtils.getCurrentLocation(this, this));
 		if (getCurrentLocation() != null) {
 			// Set the map to look at it
 			setMapTarget(getCurrentLocation());
+		}
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		boolean updated = savedInstanceState.getBoolean(
+				getString(R.string.bundle_update), false);
+
+		// Restore the current camera location
+		if (mMap != null && updated) {
+			double lat = savedInstanceState.getDouble(
+					getString(R.string.bundle_latitude), 0.0);
+			double lon = savedInstanceState.getDouble(
+					getString(R.string.bundle_longitude), 0.0);
+			CameraPosition pos = new CameraPosition.Builder()
+					.target(new LatLng(lat, lon))
+					.zoom(savedInstanceState
+							.getFloat(getString(R.string.bundle_zoom)))
+					.tilt(savedInstanceState
+							.getFloat(getString(R.string.bundle_tilt)))
+					.bearing(
+							savedInstanceState
+									.getFloat(getString(R.string.bundle_bearing)))
+					.build();
+			mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		// Store the current camera location
+		if (mMap != null) {
+			Log.i("MAP", "Save camera position");
+			CameraPosition pos = mMap.getCameraPosition();
+			savedInstanceState.putDouble(getString(R.string.bundle_latitude),
+					pos.target.latitude);
+			savedInstanceState.putDouble(getString(R.string.bundle_longitude),
+					pos.target.longitude);
+			savedInstanceState.putFloat(getString(R.string.bundle_zoom),
+					pos.zoom);
+			savedInstanceState.putFloat(getString(R.string.bundle_tilt),
+					pos.tilt);
+			savedInstanceState.putFloat(getString(R.string.bundle_bearing),
+					pos.bearing);
+			savedInstanceState.putBoolean(getString(R.string.bundle_update),
+					true);
 		}
 	}
 
@@ -385,8 +427,12 @@ public class MapActivity extends FragmentActivity implements
 		// If the new update is more accurate, update the current location
 		if (getCurrentLocation() == null
 				|| location.getAccuracy() < getCurrentLocation().getAccuracy()) {
+			if (mCurrentLocation == null) {
+				// Only focus the map on the current location if we didn't
+				// already know it
+				setMapTarget(location);
+			}
 			setCurrentLocation(location);
-			setMapTarget(location);
 		}
 	}
 

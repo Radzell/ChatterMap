@@ -41,8 +41,8 @@ public class EditNoteDialog extends DialogFragment {
 
 		// Get the location and id
 		Bundle args = getArguments();
-		mLat = args.getDouble(getString(R.string.editnote_latitude), 0.0);
-		mLong = args.getDouble(getString(R.string.editnote_longitude), 0.0);
+		mLat = args.getDouble(getString(R.string.bundle_latitude), 0.0);
+		mLong = args.getDouble(getString(R.string.bundle_longitude), 0.0);
 
 		// Set the layout and initialize:
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
