@@ -2,6 +2,8 @@ package com.chattermap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -49,6 +51,7 @@ public class MapActivity extends FragmentActivity implements
 	ChatGroup mCurrentGroup;
 	private GoogleMap mMap;
 	private Location mCurrentLocation = null;
+	private Timer mUpdateTimer;
 
 	public User mCurrentUser;
 
@@ -113,6 +116,44 @@ public class MapActivity extends FragmentActivity implements
 					.build();
 			mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Update the map every five minutes
+		mUpdateTimer = new Timer();
+
+		// Schedule a trigger that calls the update method, then update the UI
+		// in the UI thread to reflect any changes
+		mUpdateTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (mCurrentGroup == null) {
+					return;
+				}
+
+				try {
+					MapActivity.this.update(mCurrentGroup);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				MapActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						MapActivity.this.displayNotes();
+					}
+				});
+			}
+		}, 0, 300000);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		mUpdateTimer.cancel();
 	}
 
 	@Override
