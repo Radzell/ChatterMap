@@ -58,9 +58,9 @@ public class LocationActionDialog extends Dialog {
 				
 				// Pass along latitude and longitude of the click
 				Bundle args = new Bundle();
-				args.putDouble(mContext.getString(R.string.editnote_latitude),
+				args.putDouble(mContext.getString(R.string.bundle_latitude),
 						mLat);
-				args.putDouble(mContext.getString(R.string.editnote_longitude),
+				args.putDouble(mContext.getString(R.string.bundle_longitude),
 						mLong);
 				editdialog.setArguments(args);
 
